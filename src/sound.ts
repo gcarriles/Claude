@@ -1,8 +1,12 @@
 // All audio: the lofi loop and the timer cues.
 //
-// - Music is a ~53s lofi loop generated once in code (OfflineAudioContext) and
-//   then looped, so it never needs a network request or a licence. Drop a file
-//   at public/audio/lofi.mp3 to use your own track instead.
+// - Music is public/audio/lofi.mp3, a ~53s loop rendered from renderLofi()
+//   below (so it's ours, no licence needed). If the file is missing the loop
+//   is generated on the fly.
+// - Browsers block sound until the person interacts with the page, and phones
+//   only count a finished tap (touchend/click), not a finger landing. Call
+//   unlockAudio() from those events; subscribe with onAudioReady() to know when
+//   sound is actually allowed.
 // - Timer cues (5-minute chime, last-10-seconds ticks, ring at zero) are
 //   scheduled ahead on the audio clock, so they stay on time even when the tab
 //   is in the background and page timers are throttled.
@@ -16,11 +20,19 @@ let musicWanted = false;
 const MUSIC_VOLUME = 0.32;
 const CUE_VOLUME = 0.55;
 
+const readyListeners = new Set<(ready: boolean) => void>();
+
 function audio(): AudioContext {
   if (!ctx) {
+    // iPhone: play as media, so sound isn't muted by the ring/silent switch (Safari 16.4+).
+    const session = (navigator as Navigator & { audioSession?: { type: string } }).audioSession;
+    if (session) session.type = 'playback';
+
     ctx = new AudioContext();
     ctx.addEventListener('statechange', () => {
-      if (ctx?.state === 'running') {
+      const ready = ctx?.state === 'running';
+      readyListeners.forEach((fn) => fn(ready));
+      if (ready) {
         if (musicWanted) void startMusic();
         if (cueEndAt !== null) scheduleCues(cueEndAt);
       }
@@ -29,10 +41,30 @@ function audio(): AudioContext {
   return ctx;
 }
 
-/** Browsers only allow audio after a tap/click. Call this from any user gesture. */
+/** True once the browser allows sound. */
+export function isAudioReady() {
+  return ctx?.state === 'running';
+}
+
+/** Notified whenever sound becomes allowed / blocked again (e.g. iPhone after a call). */
+export function onAudioReady(fn: (ready: boolean) => void) {
+  readyListeners.add(fn);
+  return () => readyListeners.delete(fn);
+}
+
+/**
+ * Browsers only allow audio after a tap/click. Call this synchronously from a
+ * user gesture (click, touchend, keydown) — not from a timeout or effect.
+ */
 export function unlockAudio() {
   const c = audio();
-  if (c.state !== 'running') void c.resume();
+  if (c.state === 'running') return;
+  void c.resume().catch(() => {});
+  // Older iPhones only fully unlock once something actually plays inside the gesture.
+  const blip = c.createBufferSource();
+  blip.buffer = c.createBuffer(1, 1, c.sampleRate);
+  blip.connect(c.destination);
+  blip.start(0);
 }
 
 // ---------------------------------------------------------------- music

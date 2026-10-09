@@ -3,7 +3,7 @@ import { getCharacter } from './characters';
 import { loadSettings, saveSettings, type Settings } from './storage';
 import { formatClock, type PhaseEndEvent } from './timer';
 import { useTimer } from './useTimer';
-import { cancelCues, scheduleCues, setMusic, unlockAudio } from './sound';
+import { cancelCues, isAudioReady, onAudioReady, scheduleCues, setMusic, unlockAudio } from './sound';
 import { Loader } from './components/Loader';
 import { MusicButton } from './components/MusicButton';
 import { Roster } from './components/Roster';
@@ -37,18 +37,30 @@ export default function App() {
     window.setTimeout(() => setMobileScreen('timer'), 420);
   };
 
-  // Audio can only start after the first tap/click anywhere.
+  // Audio can only start after the first tap/click anywhere. Phones count a
+  // finished tap (touchend/click), not a finger landing, so listen for those.
+  const [audioReady, setAudioReady] = useState(isAudioReady);
   useEffect(() => {
     const unlock = () => unlockAudio();
-    window.addEventListener('pointerdown', unlock);
-    window.addEventListener('keydown', unlock);
+    const events = ['pointerdown', 'touchend', 'click', 'keydown'] as const;
+    events.forEach((e) => window.addEventListener(e, unlock, { capture: true }));
+    const off = onAudioReady(setAudioReady);
     return () => {
-      window.removeEventListener('pointerdown', unlock);
-      window.removeEventListener('keydown', unlock);
+      events.forEach((e) => window.removeEventListener(e, unlock, { capture: true }));
+      off();
     };
   }, []);
 
   useEffect(() => setMusic(settings.music), [settings.music]);
+
+  // The speaker button: if sound is still blocked, the first tap just starts the
+  // music (it was already "on"); otherwise it toggles. Runs inside the tap itself.
+  const toggleMusic = () => {
+    unlockAudio();
+    const next = audioReady ? !settings.music : true;
+    setMusic(next);
+    setSettings((s) => ({ ...s, music: next }));
+  };
 
   // Chime at 5 min left, ticks for the last 10 s, ring at zero — scheduled on the audio clock.
   const { status, endAt } = timer.state;
@@ -75,7 +87,7 @@ export default function App() {
     <div className={`app show-${mobileScreen}`} style={vars}>
       <Sky />
       {loading && <Loader onDone={finishLoading} />}
-      <MusicButton on={settings.music} onToggle={() => setSettings((s) => ({ ...s, music: !s.music }))} />
+      <MusicButton on={settings.music} waiting={settings.music && !audioReady} onToggle={toggleMusic} />
       <aside className="col-roster">
         <Roster activeId={character.id} onPick={pick} />
         <SettingsPanel settings={settings} onChange={setSettings} />
