@@ -347,6 +347,13 @@ button {
   flex-direction: column;
   gap: 8px;
 }
+@media (max-width: 899px) {
+  /* Tall phones: share any leftover height above and below instead of one big gap. */
+  .stage {
+    flex: 1;
+    justify-content: space-evenly;
+  }
+}
 .stage-main {
   min-width: 0;
 }
@@ -370,9 +377,12 @@ button {
 
 .house {
   position: relative;
-  /* Phone: the art has some air around the room, so let it bleed past the gutters. */
-  width: calc(100% + 56px);
-  margin: 22px -28px 0; /* top margin leaves room for bubbles above the roof */
+  /* Phone: the art has some air around the room, so let it bleed past the
+     gutters — and on tall phones grow into the spare height (~470px is the
+     name, timer, nudge line and button bar). */
+  align-self: center;
+  width: clamp(calc(100% + 56px), calc((100dvh - 470px) * 4 / 3), calc(100% + 116px));
+  margin-top: 22px; /* room for bubbles above the roof */
   aspect-ratio: 4 / 3;
 }
 .col-timer {
