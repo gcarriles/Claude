@@ -41,6 +41,14 @@ export function SettingsPanel({ settings, onChange }: Props) {
         />
       </label>
       <label className="setting">
+        <span>Timer sounds</span>
+        <input
+          type="checkbox"
+          checked={settings.timerSounds}
+          onChange={(e) => set({ timerSounds: e.target.checked })}
+        />
+      </label>
+      <label className="setting">
         <span>Default character</span>
         <select
           value={settings.defaultCharacterId}

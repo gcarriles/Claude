@@ -53,6 +53,18 @@ them left/right once they arrive.
 If you replace a house image, re-check the spots — they're placed by eye on
 the current art.
 
+### Sound
+
+- **Lofi music** loops in the background; the round note button (top right)
+  mutes it. It's `public/audio/lofi.mp3`, which was rendered from the
+  generator in `src/sound.ts` (`renderLofi`) — so it's ours, no licence needed.
+  Replace the file with any track you have the rights to; if the file is
+  missing, the app generates the loop on the fly.
+- **Timer sounds** (Settings → Timer sounds): a soft chime at 5 minutes left,
+  ticks for the last 10 seconds, and a music-box ring at zero. These are
+  scheduled ahead on the audio clock, so they stay on time in a background tab.
+- Browsers only allow sound after the first tap or click on the page.
+
 ### Opening screen
 
 A sleepy cloud says "loading household…" while the portraits load (at least

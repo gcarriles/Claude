@@ -8,12 +8,16 @@ export interface Settings {
   sessionsPerSet: number; // 2–8
   showNudge: boolean;
   defaultCharacterId: string;
+  music: boolean; // lofi loop on/off (the speaker button)
+  timerSounds: boolean; // 5-minute chime, countdown ticks, ring
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   sessionsPerSet: 4,
   showNudge: true,
   defaultCharacterId: CHARACTERS[0].id,
+  music: true,
+  timerSounds: true,
 };
 
 const SETTINGS_KEY = 'pomodoro-press:settings';

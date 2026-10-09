@@ -664,6 +664,73 @@ button {
   accent-color: var(--ink);
 }
 
+/* ---------- music button ---------- */
+
+.music-btn {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 16px);
+  right: 16px;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 2px solid var(--ink-deep);
+  border-radius: 50%;
+  background: #fffaf6;
+  color: var(--ink-deep);
+  box-shadow: 0 3px 0 var(--ink-deep);
+  transition: transform 0.15s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.music-btn:hover {
+  background: var(--ink-light);
+}
+.music-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--ink-deep);
+}
+.music-btn:focus-visible {
+  outline: 2px solid var(--ink-deep);
+  outline-offset: 3px;
+}
+.music-btn svg {
+  width: 24px;
+  height: 24px;
+}
+.music-btn:not(.is-on) svg {
+  opacity: 0.6;
+}
+/* tiny bouncing equalizer while music plays */
+.music-btn .eq {
+  position: absolute;
+  bottom: -9px;
+  right: -6px;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  background: var(--ink);
+  border: 1.5px solid var(--ink-deep);
+}
+.music-btn .eq i {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: #fff;
+  animation: eq 0.9s ease-in-out infinite;
+  transform-origin: bottom;
+}
+.music-btn .eq i:nth-child(2) { animation-delay: 0.25s; }
+.music-btn .eq i:nth-child(3) { animation-delay: 0.5s; }
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
 /* ---------- opening loader ---------- */
 
 .loader {
