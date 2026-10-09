@@ -1,0 +1,123 @@
+import { NUDGE_EVERY_MIN, type Character } from '../characters';
+import { formatClock, formatMinutes, type TimerState } from '../timer';
+import { Pips } from './Pips';
+import { PixelTimer } from './PixelTimer';
+import { Portrait } from './Portrait';
+
+interface Props {
+  character: Character;
+  state: TimerState;
+  remaining: number;
+  elapsed: number;
+  sessionsPerSet: number;
+  showNudge: boolean;
+  onStart: () => void;
+  onPause: () => void;
+  onSkip: () => void;
+  onBackToWork: () => void;
+  onRunAnother: () => void;
+  onBackToRoster: () => void;
+}
+
+export function TimerView(p: Props) {
+  const { character: c, state: s } = p;
+
+  return (
+    <section className={`timer-view phase-${s.phase}`}>
+      <button className="link-btn back" onClick={p.onBackToRoster}>
+        ← Household
+      </button>
+
+      <div className="stage">
+        <Portrait character={c} size={220} />
+        <div className="stage-main">
+          <p className="kicker">
+            {c.role} · {s.phase === 'focus' ? 'Focus' : s.phase === 'break' ? 'Break' : 'Set complete'}
+          </p>
+          <h2 className="char-name">{c.name}</h2>
+
+          {s.phase === 'done' ? <Done {...p} /> : <Running {...p} />}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Running(p: Props) {
+  const { character: c, state: s } = p;
+  const running = s.status === 'running';
+
+  let line: string;
+  if (s.phase === 'break') {
+    line = c.copy.break;
+  } else if (s.status !== 'idle' && p.showNudge) {
+    // Swap to a new nudge every NUDGE_EVERY_MIN minutes of focus time.
+    const idx = Math.floor(p.elapsed / (NUDGE_EVERY_MIN * 60_000)) % c.copy.nudges.length;
+    line = c.copy.nudges[idx];
+  } else {
+    line = c.copy.head;
+  }
+
+  return (
+    <>
+      <PixelTimer text={formatClock(p.remaining)} label={`${formatClock(p.remaining)} remaining`} />
+      <Pips total={p.sessionsPerSet} session={s.session} phase={s.phase} />
+      <p className="line" key={line}>
+        {line}
+      </p>
+
+      <div className="actions">
+        {s.phase === 'focus' ? (
+          <>
+            <button className="btn primary" onClick={running ? p.onPause : p.onStart}>
+              {running ? 'Pause' : s.status === 'paused' ? 'Resume' : 'Start'}
+            </button>
+            <button className="btn ghost" onClick={p.onSkip}>
+              Skip
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="btn primary" onClick={p.onBackToWork}>
+              Back to work
+            </button>
+            <button className="btn ghost" onClick={running ? p.onPause : p.onStart}>
+              {running ? 'Pause' : 'Resume'}
+            </button>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
+function Done(p: Props) {
+  const { character: c, state: s } = p;
+  const n = s.session;
+  return (
+    <>
+      <p className="done-summary">
+        {n} {n === 1 ? 'session' : 'sessions'} with {c.name}.
+      </p>
+      <p className="line">{c.copy.done}</p>
+      <dl className="stats">
+        <div>
+          <dt className="kicker">Total focus</dt>
+          <dd>{formatMinutes(s.focusMsTotal)}</dd>
+        </div>
+        <div>
+          <dt className="kicker">Breaks taken</dt>
+          <dd>{s.breaksTaken}</dd>
+        </div>
+      </dl>
+      <div className="actions">
+        <button className="btn primary" onClick={p.onRunAnother}>
+          Run another
+        </button>
+        <button className="btn ghost" onClick={p.onBackToRoster}>
+          Switch
+        </button>
+      </div>
+    </>
+  );
+}
