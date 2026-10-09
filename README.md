@@ -120,7 +120,7 @@ install settings are in `vite.config.ts`.
 | Characters: names, roles, minutes, colors, all copy | `src/characters.ts` |
 | Each character's spots in their house, activities and poses | `house` in `src/characters.ts` |
 | How often the running nudge changes (default 5 min) | `NUDGE_EVERY_MIN` in `src/characters.ts` |
-| How often they move to a new spot (default 2 min) | `ACTIVITY_EVERY_MIN` in `src/characters.ts` |
+| How often they move to a new spot (default 1 min) | `ACTIVITY_EVERY_MIN` in `src/characters.ts` |
 | House art | `public/art/house-<id>.png` — transparent background, 4:3 (1200 × 900) |
 | Walk cycle | `public/art/sprites/<id>.png` — 4 frames side by side, facing right |
 | Poses | `public/art/sprites/<id>-poses.png` — 4 frames side by side, facing right, same scale as the walk strip |
