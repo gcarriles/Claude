@@ -39,13 +39,56 @@ export function TimerView(p: Props) {
           {s.phase === 'done' ? <Done {...p} /> : <Running {...p} />}
         </div>
       </div>
+
+      {/* Controls live in a bar pinned to the bottom of the screen. */}
+      <div className="action-bar">
+        <Actions {...p} />
+      </div>
     </section>
+  );
+}
+
+function Actions(p: Props) {
+  const s = p.state;
+  const running = s.status === 'running';
+  if (s.phase === 'done') {
+    return (
+      <>
+        <button className="btn primary" onClick={p.onRunAnother}>
+          Run another
+        </button>
+        <button className="btn ghost" onClick={p.onBackToRoster}>
+          Switch
+        </button>
+      </>
+    );
+  }
+  if (s.phase === 'break') {
+    return (
+      <>
+        <button className="btn ghost" onClick={running ? p.onPause : p.onStart}>
+          {running ? 'Pause' : 'Resume'}
+        </button>
+        <button className="btn primary" onClick={p.onBackToWork}>
+          Back to work
+        </button>
+      </>
+    );
+  }
+  return (
+    <>
+      <button className="btn primary" onClick={running ? p.onPause : p.onStart}>
+        {running ? 'Pause' : s.status === 'paused' ? 'Resume' : 'Start'}
+      </button>
+      <button className="btn ghost" onClick={p.onSkip}>
+        Skip
+      </button>
+    </>
   );
 }
 
 function Running(p: Props) {
   const { character: c, state: s } = p;
-  const running = s.status === 'running';
 
   let line: string;
   if (s.phase === 'break') {
@@ -66,27 +109,6 @@ function Running(p: Props) {
         {line}
       </p>
 
-      <div className="actions">
-        {s.phase === 'focus' ? (
-          <>
-            <button className="btn primary" onClick={running ? p.onPause : p.onStart}>
-              {running ? 'Pause' : s.status === 'paused' ? 'Resume' : 'Start'}
-            </button>
-            <button className="btn ghost" onClick={p.onSkip}>
-              Skip
-            </button>
-          </>
-        ) : (
-          <>
-            <button className="btn primary" onClick={p.onBackToWork}>
-              Back to work
-            </button>
-            <button className="btn ghost" onClick={running ? p.onPause : p.onStart}>
-              {running ? 'Pause' : 'Resume'}
-            </button>
-          </>
-        )}
-      </div>
     </>
   );
 }
@@ -110,14 +132,6 @@ function Done(p: Props) {
           <dd>{s.breaksTaken}</dd>
         </div>
       </dl>
-      <div className="actions">
-        <button className="btn primary" onClick={p.onRunAnother}>
-          Run another
-        </button>
-        <button className="btn ghost" onClick={p.onBackToRoster}>
-          Switch
-        </button>
-      </div>
     </>
   );
 }

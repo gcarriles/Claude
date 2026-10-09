@@ -74,6 +74,14 @@ button {
 .col-timer {
   padding: calc(env(safe-area-inset-top) + 28px) var(--gutter) 40px;
 }
+/* The timer column fills the screen so its action bar can sit at the bottom. */
+.col-timer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: 0;
+}
 
 /* Phone: one screen at a time */
 @media (max-width: 899px) {
@@ -94,9 +102,7 @@ button {
     padding: 48px 0 48px 40px;
   }
   .col-timer {
-    padding: 48px 48px 48px 24px;
-    display: flex;
-    align-items: center;
+    padding: 40px 48px 0 24px;
   }
   .back {
     display: none;
@@ -320,10 +326,14 @@ button {
 /* ---------- timer view ---------- */
 
 .timer-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
 .link-btn {
+  align-self: flex-start;
   border: 0;
   background: none;
   padding: 4px 0;
@@ -335,7 +345,7 @@ button {
 .stage {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
 }
 .stage-main {
   min-width: 0;
@@ -343,13 +353,16 @@ button {
 
 @media (min-width: 1100px) {
   .stage {
+    flex: 1;
     flex-direction: row;
     align-items: center;
-    gap: 44px;
+    gap: 36px;
   }
   .stage .house {
-    flex: 1 1 52%;
-    max-width: 620px;
+    flex: 1 1 auto;
+  }
+  .stage-main {
+    flex: 0 0 300px;
   }
 }
 
@@ -357,10 +370,21 @@ button {
 
 .house {
   position: relative;
-  width: 100%;
-  max-width: 560px;
+  /* Phone: the art has some air around the room, so let it bleed past the gutters. */
+  width: calc(100% + 56px);
+  margin: 22px -28px 0; /* top margin leaves room for bubbles above the roof */
   aspect-ratio: 4 / 3;
-  margin-top: 26px; /* room for heads + bubbles above the roof line */
+}
+.col-timer {
+  overflow-x: clip;
+}
+@media (min-width: 900px) {
+  .house {
+    width: 100%;
+    /* as big as fits between the top and the action bar */
+    max-width: min(940px, calc((100dvh - 170px) * 4 / 3));
+    margin: 10px auto 0;
+  }
 }
 .house-art {
   display: block;
@@ -470,13 +494,13 @@ button {
   margin: 8px 0 6px;
   font-family: var(--timer);
   font-weight: 700;
-  font-size: clamp(84px, 25vw, 108px);
+  font-size: clamp(58px, 17vw, 76px);
   line-height: 1;
   user-select: none;
 }
 @media (min-width: 900px) {
   .bubble-timer {
-    font-size: clamp(110px, 10vw, 170px);
+    font-size: clamp(76px, 6.5vw, 112px);
   }
 }
 .bt-layer {
@@ -528,7 +552,7 @@ button {
 }
 
 .line {
-  margin: 0 0 22px;
+  margin: 0 0 16px;
   max-width: 34ch;
   font-family: var(--hand);
   font-size: 22px;
@@ -542,11 +566,28 @@ button {
   }
 }
 
-/* Buttons */
-.actions {
+/* Buttons: pinned to the bottom of the screen */
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  justify-content: center;
+  gap: 12px;
+  margin: auto calc(-1 * var(--gutter)) 0;
+  padding: 26px var(--gutter) calc(env(safe-area-inset-bottom) + 18px);
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--horizon) 85%, transparent) 45%);
+}
+.action-bar .btn {
+  flex: 1 1 0;
+  max-width: 220px;
+}
+@media (min-width: 900px) {
+  .action-bar {
+    margin: auto 0 0;
+    padding: 18px 0 28px;
+    background: none;
+  }
 }
 .btn {
   min-width: 120px;
@@ -664,71 +705,50 @@ button {
   accent-color: var(--ink);
 }
 
-/* ---------- music button ---------- */
+/* ---------- music button (speaker) ---------- */
 
 .music-btn {
   position: fixed;
-  top: calc(env(safe-area-inset-top) + 16px);
-  right: 16px;
+  top: calc(env(safe-area-inset-top) + 14px);
+  right: 14px;
   z-index: 5;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   padding: 0;
-  border: 2px solid var(--ink-deep);
+  border: 2px solid #8a6aa8;
   border-radius: 50%;
   background: #fffaf6;
-  color: var(--ink-deep);
-  box-shadow: 0 3px 0 var(--ink-deep);
+  box-shadow: 0 3px 0 #8a6aa8;
   transition: transform 0.15s ease, background 0.2s ease;
   -webkit-tap-highlight-color: transparent;
 }
 .music-btn:hover {
-  background: var(--ink-light);
+  background: #f3ecfb;
 }
 .music-btn:active {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--ink-deep);
+  box-shadow: 0 1px 0 #8a6aa8;
 }
 .music-btn:focus-visible {
-  outline: 2px solid var(--ink-deep);
+  outline: 2px solid #8a6aa8;
   outline-offset: 3px;
 }
 .music-btn svg {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
+  overflow: visible;
 }
-.music-btn:not(.is-on) svg {
-  opacity: 0.6;
+.music-btn .wave {
+  animation: wave 1.6s ease-in-out infinite;
 }
-/* tiny bouncing equalizer while music plays */
-.music-btn .eq {
-  position: absolute;
-  bottom: -9px;
-  right: -6px;
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 14px;
-  padding: 2px 4px;
-  border-radius: 8px;
-  background: var(--ink);
-  border: 1.5px solid var(--ink-deep);
+.music-btn .wave-2 {
+  animation-delay: 0.3s;
 }
-.music-btn .eq i {
-  width: 3px;
-  height: 100%;
-  border-radius: 2px;
-  background: #fff;
-  animation: eq 0.9s ease-in-out infinite;
-  transform-origin: bottom;
-}
-.music-btn .eq i:nth-child(2) { animation-delay: 0.25s; }
-.music-btn .eq i:nth-child(3) { animation-delay: 0.5s; }
-@keyframes eq {
-  0%, 100% { transform: scaleY(0.35); }
-  50% { transform: scaleY(1); }
+@keyframes wave {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
 
 /* ---------- opening loader ---------- */
