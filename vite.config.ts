@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
+  // GitHub Pages serves the app from /<repo-name>/; the deploy workflow sets BASE_PATH.
+  base: process.env.BASE_PATH ?? '/',
   plugins: [
     react(),
     // Installable app + offline support (service worker precaches the app, art and music).

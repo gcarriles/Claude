@@ -1,9 +1,84 @@
 # Pomodoro Press
 
-A cozy pomodoro timer where someone from the household keeps time. Each
-character has their own session lengths, colors and voice.
+<img src="docs/screenshots/icon.webp" width="96" align="right" alt="App icon: a sleepy cloud with a pixel cat on top" />
 
-Built with React + TypeScript + Vite.
+**A cozy pomodoro timer kept by my household.** Pick who keeps time: Mochi,
+Yuki, Geneva or Danny. Each one has their own session lengths, colors, voice
+and pixel-art room, and you watch them go about their day while you focus.
+
+**Live app:** https://gcarriles.github.io/Claude/ — installable on phone and
+desktop, works offline.
+
+![Desktop: Geneva's coffee-bar room with the timer running](docs/screenshots/desktop.webp)
+
+<p align="center">
+  <img src="docs/screenshots/phone.webp" width="300" alt="Phone: Danny's gaming loft with the timer running" />
+</p>
+
+## The idea
+
+Most focus timers are a number on a screen. I wanted one that felt like
+company: a timer kept by the people (and cats) I live with, in their own
+voices, with the warmth of a cozy life-sim game. Mochi will tell you she's
+on your keyboard. Geneva will tell you to close the tab. Danny will remind you
+it isn't a race.
+
+## What it does
+
+- **Four timekeepers, four personalities.** Each has their own focus/break
+  lengths (from Mochi's 20/10 to Danny's 40/15), color palette and lines that
+  rotate every few minutes while you work.
+- **Living rooms.** Every character has a pixel-art room. During focus they
+  walk between spots — Danny games and reads up in his loft, Geneva pulls
+  espresso and reads in her nook, the cats patrol their trees — switching to
+  sitting, reading, sleeping or stretching poses as they go. Tap one and it
+  wiggles.
+- **Sound that keeps you on track.** An original lofi loop (mutable), a chime
+  at 5 minutes left, ticks for the final 10 seconds and a music-box ring at
+  zero.
+- **Built for real use.** Accurate in background tabs, survives refreshes,
+  installs like an app on iPhone, Android, Mac and Windows, and works offline.
+
+![Every character at every spot, plus their break spot](docs/screenshots/all-rooms.webp)
+
+## How I built it
+
+I built this as an AI-directed product: I owned the concept, the experience
+and the art direction, and used AI tools to build and illustrate it,
+iterating through reviews of each version.
+
+- **Product & design direction (me):** the concept, characters and their
+  voices, the cozy-game look, the reference boards for each room, and
+  feedback on every iteration (layout, whimsy, sizing, controls).
+- **Engineering:** Claude Code (Anthropic's coding agent) wrote the React +
+  TypeScript app, tested it in a headless browser at phone and desktop sizes,
+  and handled the asset pipeline — cutting backgrounds off the art, slicing
+  sprite sheets, and compressing images.
+- **Art:** rooms, walk cycles and poses generated with Nano Banana (Google)
+  from prompts written for a consistent pixel-art style.
+
+### Decisions along the way
+
+- **Code-drawn rooms → generated pixel art.** The first rooms were drawn in
+  code. They worked, but couldn't match the reference mood, so the code was
+  restructured to place characters on painted room images instead.
+- **Floating heads → walking sprites with poses.** Characters started as
+  portrait cut-outs; walk cycles and pose sheets turned them into residents.
+- **Original music instead of a downloaded track.** The lofi loop is
+  generated in code, so there's no licensing question.
+- **Web app instead of the app stores.** For personal use, an installable
+  web app gives the same experience for free; the stores would add cost and
+  review overhead for one extra capability (notifications on a locked phone).
+- **Sounds scheduled on the audio clock.** Browsers slow down timers in
+  background tabs, so cues are scheduled ahead on the audio hardware clock to
+  land on the exact second.
+
+## Tech
+
+React, TypeScript, Vite, Web Audio API, PWA (service worker + manifest),
+deployed to GitHub Pages with GitHub Actions.
+
+---
 
 ## Run it
 
@@ -30,14 +105,12 @@ cached on first visit).
 
 ### Hosting
 
-Any static host works. Easiest: connect this repo to Netlify, Vercel or
-Cloudflare Pages with
+Every push to `main` builds and publishes the app to GitHub Pages
+(`.github/workflows/deploy.yml`); installed copies update themselves on next
+launch. One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
 
-- build command: `npm run build`
-- output folder: `dist`
-
-Every push then redeploys, and installed copies update themselves on next
-launch.
+Any other static host works too (build command `npm run build`, output folder
+`dist`).
 
 App icons live in `public/` (`icon-192.png`, `icon-512.png`,
 `icon-maskable-512.png`, `apple-touch-icon.png`, `favicon-64.png`); the
@@ -81,7 +154,7 @@ the current art.
 
 ### Sound
 
-- **Lofi music** loops in the background; the round note button (top right)
+- **Lofi music** loops in the background; the speaker button (top right)
   mutes it. It's `public/audio/lofi.mp3`, which was rendered from the
   generator in `src/sound.ts` (`renderLofi`) — so it's ours, no licence needed.
   Replace the file with any track you have the rights to; if the file is
@@ -113,11 +186,10 @@ minutes. Add or remove lines freely. Turn the line off in Settings.
   character) and the current session (character, phase, end time, session
   count, paused time left), so a refresh resumes where you were.
 
-## Built to grow into (not done yet)
+## Ideas for later
 
-- **Sound / notifications at phase end** — hook in `handlePhaseEnd` in `src/App.tsx`
+- **Notifications at phase end** — hook in `handlePhaseEnd` in `src/App.tsx`
   (it receives `{ characterId, from, to }`).
 - **Daily log + streaks** — each character already has a `streak` line in the config.
 - **Sync across phone and desktop** — timer state is a plain object in `src/timer.ts`,
   so it can be sent to a server as-is.
-- **PWA install** — add a manifest + service worker (e.g. `vite-plugin-pwa`).
