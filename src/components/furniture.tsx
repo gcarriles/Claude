@@ -36,6 +36,10 @@ export type FurnitureKind =
   | 'kitchenette'
   | 'pawRug'
   | 'shootingStar'
+  | 'moonWindow'
+  | 'moonBed'
+  | 'yarnBalls'
+  | 'wallClouds'
   // Yuki: blossom cat room
   | 'blossomTree'
   | 'starWindow'
@@ -367,6 +371,34 @@ const PIECES: Record<FurnitureKind, () => ReactElement> = {
           <circle cx={x - r / 3} cy={y - r / 3} r={r / 3} fill="#9fd08f" />
         </g>
       ))}
+      {/* pink blossoms */}
+      {[
+        [-52, -124],
+        [-30, -140],
+        [-40, -108],
+        [46, -104],
+        [58, -92],
+        [36, -128],
+        [-10, -174],
+        [50, -176],
+        [40, -164],
+      ].map(([x, y], i) => (
+        <g key={i}>
+          <circle cx={x} cy={y} r={3.2} fill="#ffc6dc" stroke={LINE} strokeWidth={0.6} />
+          <circle cx={x} cy={y} r={1} fill="#fff3c4" />
+        </g>
+      ))}
+      {/* tiny glowing stars hung in the branches */}
+      {[
+        [-60, -96],
+        [62, -76],
+        [-20, -112],
+      ].map(([x, y], i) => (
+        <g key={i} className="pp-dangle" style={{ animationDelay: `${i * 0.7}s` }}>
+          <line x1={x} y1={y - 16} x2={x} y2={y} stroke="#e0b44a" strokeWidth={0.8} />
+          <path transform={`translate(${x} ${y})`} d="M0 -6 l1.8 3.7 4 .6 -2.9 2.8 .7 4 -3.6 -1.9 -3.6 1.9 .7 -4 -2.9 -2.8 4 -.6 Z" fill={GLOW} stroke="#e0b44a" strokeWidth={0.8} />
+        </g>
+      ))}
       <path d="M-46 -96 l0 18" stroke={LINE} strokeWidth={1} />
       <circle cx={-46} cy={-76} r={4} fill="#7fb6ff" {...s} />
     </g>
@@ -398,6 +430,61 @@ const PIECES: Record<FurnitureKind, () => ReactElement> = {
       <ellipse cx={0} cy={3} rx={13} ry={6} fill={PINK_DEEP} />
       {[-20, -7, 7, 20].map((x, i) => (
         <ellipse key={x} cx={x} cy={i === 0 || i === 3 ? -4 : -7} rx={5} ry={3} fill={PINK_DEEP} />
+      ))}
+    </g>
+  ),
+  moonWindow: () => (
+    <g>
+      <circle cx={0} cy={-40} r={40} fill={WOOD} {...s} />
+      <circle cx={0} cy={-40} r={33} fill="url(#pp-night)" {...s} />
+      <circle className="pp-glow" cx={6} cy={-46} r={20} fill="url(#pp-glow)" />
+      <circle cx={6} cy={-46} r={13} fill="#fff3c4" stroke="#e0b44a" strokeWidth={1} />
+      <circle cx={13} cy={-50} r={11} fill="#2a2d70" />
+      {[
+        [-18, -56],
+        [-10, -24],
+        [20, -30],
+        [-22, -38],
+        [18, -58],
+      ].map(([x, y], i) => (
+        <circle key={i} className="pp-bulb" style={{ animationDelay: `${i * 0.5}s` }} cx={x} cy={y} r={1.5} fill="#fff" />
+      ))}
+      <path d="M-33 -30 q10 -8 20 -2 q8 -6 18 0 q8 -4 28 4 L30 -18 A33 33 0 0 1 -30 -18 Z" fill="#cfd8f2" opacity={0.9} />
+      <line x1={-33} y1={-40} x2={33} y2={-40} stroke={WOOD} strokeWidth={2.5} />
+      <line x1={0} y1={-73} x2={0} y2={-7} stroke={WOOD} strokeWidth={2.5} />
+    </g>
+  ),
+  moonBed: () => (
+    <g>
+      <path d="M-40 -6 C-40 -40 0 -52 26 -40 C4 -36 -14 -22 -12 -6 Z" fill="#fff3c4" {...s} />
+      <ellipse cx={0} cy={-6} rx={42} ry={10} fill="#b9c6ee" {...s} />
+      <ellipse cx={4} cy={-9} rx={30} ry={6} fill="#e8edfb" {...s} strokeWidth={1.1} />
+      <circle cx={-22} cy={-30} r={2} fill="#e0b44a" />
+      <circle cx={-10} cy={-38} r={1.6} fill="#e0b44a" />
+    </g>
+  ),
+  yarnBalls: () => (
+    <g>
+      {[
+        [-12, -9, 9, PINK_DEEP],
+        [8, -8, 8, '#b9a4ec'],
+      ].map(([x, y, r, c], i) => (
+        <g key={i}>
+          <circle cx={x as number} cy={y as number} r={r as number} fill={c as string} {...s} />
+          <path d={`M${(x as number) - 6} ${(y as number) - 3} q6 4 12 0 M${(x as number) - 5} ${(y as number) + 3} q5 -5 10 -1`} fill="none" stroke="#fff" strokeWidth={1} opacity={0.7} />
+        </g>
+      ))}
+      <path d="M16 -6 q14 4 22 0" fill="none" stroke="#b9a4ec" strokeWidth={1.4} />
+    </g>
+  ),
+  wallClouds: () => (
+    <g fill="#fff" opacity={0.75}>
+      {[
+        [-150, 0],
+        [-40, 24],
+        [80, -6],
+      ].map(([x, y], i) => (
+        <path key={i} transform={`translate(${x} ${y})`} d="M-18 0 C-24 0 -24 -9 -16 -9 C-14 -16 -2 -17 1 -10 C6 -15 16 -12 15 -5 C22 -5 22 0 16 0 Z" />
       ))}
     </g>
   ),
