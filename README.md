@@ -17,6 +17,32 @@ npm run preview   # serve the production build
 To try it on your phone, run `npm run dev -- --host` and open the "Network"
 URL on a phone on the same Wi-Fi.
 
+## Install it like an app
+
+Pomodoro Press is a Progressive Web App: once it's hosted on an `https://`
+address, it can be installed and works offline (the app, art and music are
+cached on first visit).
+
+- **iPhone/iPad (Safari):** Share → *Add to Home Screen*
+- **Android (Chrome):** menu → *Install app*
+- **Mac/Windows (Chrome or Edge):** install icon in the address bar.
+  Safari on Mac: File → *Add to Dock*
+
+### Hosting
+
+Any static host works. Easiest: connect this repo to Netlify, Vercel or
+Cloudflare Pages with
+
+- build command: `npm run build`
+- output folder: `dist`
+
+Every push then redeploys, and installed copies update themselves on next
+launch.
+
+App icons live in `public/` (`icon-192.png`, `icon-512.png`,
+`icon-maskable-512.png`, `apple-touch-icon.png`, `favicon-64.png`); the
+install settings are in `vite.config.ts`.
+
 ## Where to edit things
 
 | What | Where |
