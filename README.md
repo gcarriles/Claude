@@ -25,7 +25,9 @@ URL on a phone on the same Wi-Fi.
 | Each character's house: furniture, spots, activities | `house` in `src/characters.ts` |
 | How often the running nudge changes (default 5 min) | `NUDGE_EVERY_MIN` in `src/characters.ts` |
 | How often they move to a new spot (default 2 min) | `ACTIVITY_EVERY_MIN` in `src/characters.ts` |
-| Portraits (transparent cut-outs) | `public/art/<id>.png` (e.g. `mochi.png`). Missing file → initials in the character's ink |
+| Portraits for the roster (transparent cut-outs) | `public/art/<id>.png` (e.g. `mochi.png`). Missing file → initials in the character's ink |
+| Walking sprites used in the houses | `public/art/sprites/<id>.png` — one horizontal strip of walk frames; set `sprite.frames` and `sprite.height` in `src/characters.ts`. Missing file → the portrait is used instead |
+| Room colors (wall, stripe, floor) | `house.theme` in `src/characters.ts` |
 | Furniture drawings | `src/components/furniture.tsx` |
 | Colors, fonts, sky, layout | `src/styles.css` (font choices are the `--display`, `--hand`, `--timer`, `--body` variables) |
 | Timer rules (focus → break → … → set complete) | `src/timer.ts` |
@@ -39,6 +41,10 @@ Each character has a little room. While focus runs, they hop between the
 with a speech bubble saying what they're up to. On break and at the end of a
 set they go to their `rest` spot. Tap them in the house (or in the roster) to
 make them wiggle.
+
+Characters walk between spots using their sprite strip (and turn to face
+the way they're going), then stand on frame 1 while they're "doing" the
+activity.
 
 The room is 400 × 300 units. `x` runs left → right, `y` top → bottom, and a
 station's `y` is where the character's feet/bottom sit.

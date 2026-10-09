@@ -9,7 +9,16 @@ export interface Station {
   activity: string;
 }
 
+export interface RoomTheme {
+  wall: string;
+  band: string; // lower wall stripe
+  floor: string;
+  floorLine: string;
+  side: string; // side walls
+}
+
 export interface House {
+  theme: RoomTheme;
   furniture: { kind: FurnitureKind; x: number; y: number; scale?: number }[];
   stations: Station[]; // visited in order while focus runs
   rest: Station; // where they go on break and when the set is done
@@ -36,6 +45,8 @@ export interface Character {
     streak: string; // reserved for the streaks feature (not shown yet)
   };
   house: House;
+  /** Walk-cycle strip in public/art/sprites/<id>.png. Height is in room units (room is 300 tall). */
+  sprite: { frames: number; height: number };
 }
 
 // How often (in minutes of focus time) the running nudge line changes.
@@ -65,23 +76,24 @@ export const CHARACTERS: Character[] = [
       done: 'Four rounds, zero belly rubs. Noted.',
       streak: 'Another day, another loaf. Consistency is my brand.',
     },
+    sprite: { frames: 4, height: 50 },
     house: {
+      theme: { wall: '#cfd8f2', band: '#b9c6ee', floor: '#efe3d3', floorLine: '#d9c9b4', side: '#c2cdeb' },
       furniture: [
-        { kind: 'window', x: 120, y: 125 },
-        { kind: 'catTree', x: 52, y: 238 },
-        { kind: 'desk', x: 292, y: 215 },
-        { kind: 'tableLamp', x: 330, y: 165 },
-        { kind: 'plant', x: 372, y: 228 },
-        { kind: 'rug', x: 175, y: 262 },
-        { kind: 'bowl', x: 250, y: 284 },
+        { kind: 'shootingStar', x: 300, y: 50 },
+        { kind: 'window', x: 300, y: 130 },
+        { kind: 'kitchenette', x: 72, y: 228 },
+        { kind: 'bonsaiTree', x: 200, y: 252 },
+        { kind: 'pawRug', x: 310, y: 272 },
+        { kind: 'bowl', x: 128, y: 282 },
       ],
       stations: [
-        { x: 270, y: 166, activity: 'sitting on your keyboard' },
-        { x: 175, y: 262, activity: 'loafing in the sunbeam' },
-        { x: 52, y: 112, activity: 'supervising from the cat tree' },
-        { x: 250, y: 284, activity: 'staring at the food bowl' },
+        { x: 222, y: 101, activity: 'supervising from the bonsai' },
+        { x: 310, y: 270, activity: 'loafing on the paw rug' },
+        { x: 58, y: 164, activity: 'sitting in the sink, as one does' },
+        { x: 150, y: 284, activity: 'staring at the food bowl' },
       ],
-      rest: { x: 175, y: 262, activity: 'lap time. get in position.' },
+      rest: { x: 310, y: 270, activity: 'lap time. get in position.' },
     },
   },
   {
@@ -104,23 +116,24 @@ export const CHARACTERS: Character[] = [
       done: 'Adequate. You may now approach.',
       streak: 'You came back. I noticed. I will not say more.',
     },
+    sprite: { frames: 4, height: 46 },
     house: {
+      theme: { wall: '#f6c9d6', band: '#f0b4c6', floor: '#f7d6e0', floorLine: '#efc2d0', side: '#efbccc' },
       furniture: [
-        { kind: 'window', x: 150, y: 128 },
-        { kind: 'frame', x: 248, y: 100 },
-        { kind: 'bookshelf', x: 330, y: 215 },
-        { kind: 'floorLamp', x: 40, y: 226 },
-        { kind: 'plant', x: 232, y: 222 },
-        { kind: 'rug', x: 200, y: 266 },
-        { kind: 'catBed', x: 95, y: 270 },
+        { kind: 'hangingStars', x: 200, y: 14 },
+        { kind: 'frame', x: 80, y: 112 },
+        { kind: 'starWindow', x: 330, y: 150 },
+        { kind: 'catBed', x: 80, y: 262, scale: 1.2 },
+        { kind: 'blossomTree', x: 200, y: 262 },
+        { kind: 'cloudMat', x: 260, y: 286 },
       ],
       stations: [
-        { x: 330, y: 71, activity: "on the top shelf. don't look." },
-        { x: 150, y: 128, activity: 'staring out the window' },
-        { x: 200, y: 266, activity: 'grooming, very seriously' },
-        { x: 250, y: 226, activity: 'inspecting the plant' },
+        { x: 200, y: 87, activity: "on the top branch. don't look." },
+        { x: 330, y: 148, activity: 'stargazing' },
+        { x: 230, y: 159, activity: 'napping on a cloud' },
+        { x: 260, y: 284, activity: 'guarding the food bowls' },
       ],
-      rest: { x: 95, y: 262, activity: 'accepting one head scratch' },
+      rest: { x: 80, y: 256, activity: 'accepting one head scratch' },
     },
   },
   {
@@ -143,23 +156,27 @@ export const CHARACTERS: Character[] = [
       done: 'Done is done. Next.',
       streak: 'Streak alive. Protect it.',
     },
+    sprite: { frames: 4, height: 84 },
     house: {
+      theme: { wall: '#fbf3ec', band: '#f3dccf', floor: '#ddb084', floorLine: '#c4925f', side: '#f2e4d8' },
       furniture: [
-        { kind: 'window', x: 315, y: 120 },
-        { kind: 'desk', x: 95, y: 215 },
-        { kind: 'tableLamp', x: 130, y: 165 },
-        { kind: 'vanity', x: 205, y: 212 },
-        { kind: 'plant', x: 26, y: 232 },
-        { kind: 'bed', x: 318, y: 252 },
-        { kind: 'rug', x: 170, y: 270 },
+        { kind: 'stringLights', x: 200, y: 22 },
+        { kind: 'chalkboard', x: 340, y: 120 },
+        { kind: 'archLibrary', x: 205, y: 214 },
+        { kind: 'espressoBar', x: 62, y: 226 },
+        { kind: 'lowBookcase', x: 330, y: 262 },
+        { kind: 'globe', x: 344, y: 200 },
+        { kind: 'plant', x: 312, y: 200, scale: 0.7 },
+        { kind: 'lowBookcase', x: 150, y: 290 },
+        { kind: 'laptop', x: 150, y: 228 },
       ],
       stations: [
-        { x: 80, y: 222, activity: 'answering the hard email' },
-        { x: 205, y: 222, activity: 'tidying the vanity' },
-        { x: 40, y: 262, activity: 'watering the plants' },
-        { x: 318, y: 228, activity: 'making the bed. hospital corners.' },
+        { x: 84, y: 266, activity: 'pulling an espresso shot' },
+        { x: 205, y: 288, activity: 'answering the hard email' },
+        { x: 205, y: 170, activity: 'reading in the nook' },
+        { x: 282, y: 270, activity: 'reshelving the books' },
       ],
-      rest: { x: 330, y: 222, activity: 'five minutes horizontal. four, really.' },
+      rest: { x: 190, y: 170, activity: 'five minutes in the nook. four, really.' },
     },
   },
   {
@@ -182,24 +199,27 @@ export const CHARACTERS: Character[] = [
       done: "See? Got there. Told you it wasn't a race.",
       streak: 'Look at us, showing up. Again. Casually.',
     },
+    sprite: { frames: 4, height: 84 },
     house: {
+      theme: { wall: '#4b3d7d', band: '#3d3168', floor: '#5a4a8f', floorLine: '#4a3c7a', side: '#3f3370' },
       furniture: [
-        { kind: 'window', x: 150, y: 120 },
-        { kind: 'shortShelf', x: 260, y: 212 },
-        { kind: 'recordPlayer', x: 340, y: 214 },
-        { kind: 'floorLamp', x: 44, y: 240 },
-        { kind: 'plant', x: 380, y: 236 },
-        { kind: 'couch', x: 150, y: 252 },
-        { kind: 'rug', x: 215, y: 276 },
-        { kind: 'coffeeTable', x: 250, y: 286 },
+        { kind: 'ledStrip', x: 200, y: 24 },
+        { kind: 'neonController', x: 80, y: 66 },
+        { kind: 'neonSign', x: 292, y: 82 },
+        { kind: 'loftBed', x: 108, y: 214, scale: 0.8 },
+        { kind: 'plant', x: 150, y: 124, scale: 0.55 },
+        { kind: 'gamingDesk', x: 222, y: 220 },
+        { kind: 'pcTower', x: 346, y: 228 },
+        { kind: 'rug', x: 220, y: 282 },
+        { kind: 'gamingChair', x: 212, y: 262 },
       ],
       stations: [
-        { x: 130, y: 226, activity: 'reading a book on the couch' },
-        { x: 340, y: 230, activity: 'flipping the record' },
-        { x: 200, y: 276, activity: 'sweeping. slowly.' },
-        { x: 260, y: 230, activity: 'browsing for a different book' },
+        { x: 212, y: 264, activity: "gaming. it's research." },
+        { x: 300, y: 262, activity: 'tweaking the RGB' },
+        { x: 84, y: 114, activity: 'reading up in the loft' },
+        { x: 110, y: 282, activity: 'stretching. slowly.' },
       ],
-      rest: { x: 150, y: 226, activity: 'horizontal on the couch' },
+      rest: { x: 84, y: 114, activity: 'napping in the loft' },
     },
   },
 ];

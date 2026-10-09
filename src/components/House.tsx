@@ -24,6 +24,20 @@ function bubbleAlign(x: number) {
   return '';
 }
 
+const spriteUrl = (c: Character) => `${import.meta.env.BASE_URL}art/sprites/${c.id}.png`;
+
+/** Width/height of one sprite frame, or null if the sprite file is missing. */
+function useSpriteAspect(c: Character): number | null {
+  const [aspect, setAspect] = useState<number | null>(null);
+  useEffect(() => {
+    setAspect(null);
+    const img = new Image();
+    img.onload = () => setAspect(img.naturalWidth / c.sprite.frames / img.naturalHeight);
+    img.src = spriteUrl(c);
+  }, [c]);
+  return aspect;
+}
+
 interface Props {
   character: Character;
   state: TimerState;
@@ -33,19 +47,26 @@ interface Props {
 export function House({ character: c, state, elapsed }: Props) {
   const station = currentStation(c, state, elapsed);
   const [walking, setWalking] = useState(false);
+  const [facingLeft, setFacingLeft] = useState(false);
   const [wiggle, setWiggle] = useState(0);
-  const first = useRef(true);
+  const prevX = useRef<number | null>(null);
+  const aspect = useSpriteAspect(c);
 
-  // Hop while walking between spots.
+  // Walk (and face the right way) when moving between spots.
   useEffect(() => {
-    if (first.current) {
-      first.current = false;
-      return;
-    }
+    const from = prevX.current;
+    prevX.current = station.x;
+    if (from === null) return;
+    if (station.x !== from) setFacingLeft(station.x < from);
     setWalking(true);
     const id = window.setTimeout(() => setWalking(false), WALK_MS);
     return () => window.clearTimeout(id);
   }, [station.x, station.y]);
+
+  // Size: sprites use their configured height; the portrait fallback is a square.
+  const size = aspect
+    ? { width: `${((c.sprite.height * aspect) / W) * 100}%`, height: `${(c.sprite.height / H) * 100}%` }
+    : { width: '22%', height: `${((W * 0.22) / H) * 100}%` };
 
   // Optional painted house: drop public/art/house-<id>.png in and it replaces the drawn room.
   const [painted, setPainted] = useState(false);
@@ -68,7 +89,7 @@ export function House({ character: c, state, elapsed }: Props) {
 
       <button
         className={`resident${walking ? ' is-walking' : ''}${resting ? ' is-resting' : ''}`}
-        style={{ left: `${(station.x / W) * 100}%`, bottom: `${((H - station.y) / H) * 100}%` }}
+        style={{ ...size, left: `${(station.x / W) * 100}%`, bottom: `${((H - station.y) / H) * 100}%` }}
         onClick={() => setWiggle((n) => n + 1)}
         aria-label={`${c.name} is ${station.activity}`}
       >
@@ -76,7 +97,19 @@ export function House({ character: c, state, elapsed }: Props) {
           {station.activity}
         </span>
         <span className={`resident-body${wiggle ? ' wiggle' : ''}`} key={wiggle}>
-          <Portrait character={c} />
+          {aspect ? (
+            <span
+              className={`sprite${facingLeft ? ' face-left' : ''}`}
+              style={{
+                backgroundImage: `url(${spriteUrl(c)})`,
+                backgroundSize: `${c.sprite.frames * 100}% 100%`,
+                animationTimingFunction: `steps(${c.sprite.frames})`,
+                ['--walk-end' as string]: `${(c.sprite.frames / (c.sprite.frames - 1)) * 100}%`,
+              }}
+            />
+          ) : (
+            <Portrait character={c} />
+          )}
         </span>
         <span className="resident-shadow" />
       </button>
@@ -85,30 +118,28 @@ export function House({ character: c, state, elapsed }: Props) {
 }
 
 function Room({ character: c }: { character: Character }) {
+  const th = c.house.theme;
   return (
     <svg className="room" viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
       <FurnitureDefs />
       {/* side walls */}
-      <path d="M0 0 L28 14 L28 210 L0 296 Z" fill="var(--horizon)" />
-      <path d="M0 0 L28 14 L28 210 L0 296 Z" fill="#a0636b" opacity={0.12} />
-      <path d="M400 0 L372 14 L372 210 L400 296 Z" fill="var(--horizon)" />
-      <path d="M400 0 L372 14 L372 210 L400 296 Z" fill="#a0636b" opacity={0.08} />
+      <path d="M0 0 L28 14 L28 210 L0 296 Z" fill={th.side} />
+      <path d="M400 0 L372 14 L372 210 L400 296 Z" fill={th.side} />
       {/* back wall + wallpaper */}
-      <rect x={28} y={14} width={344} height={196} fill="var(--horizon)" />
-      <rect x={28} y={14} width={344} height={196} fill="url(#pp-wallpaper)" />
-      <rect x={28} y={150} width={344} height={60} fill="var(--ink-light)" opacity={0.35} />
-      <rect x={28} y={148} width={344} height={4} fill="#ffffff" opacity={0.7} />
+      <rect x={28} y={14} width={344} height={196} fill={th.wall} />
+      <rect x={28} y={14} width={344} height={196} fill="url(#pp-wallpaper)" opacity={0.6} />
+      <rect x={28} y={150} width={344} height={60} fill={th.band} />
+      <rect x={28} y={148} width={344} height={4} fill="#ffffff" opacity={0.45} />
       {/* floor */}
-      <path d="M28 210 L372 210 L400 296 L0 296 Z" fill="#f0cfa8" />
+      <path d="M28 210 L372 210 L400 296 L0 296 Z" fill={th.floor} />
       {[230, 252, 276].map((y) => (
-        <line key={y} x1={0} y1={y} x2={W} y2={y} stroke="#d9ab80" strokeWidth={1} opacity={0.6} />
+        <line key={y} x1={0} y1={y} x2={W} y2={y} stroke={th.floorLine} strokeWidth={1} />
       ))}
-      <path d="M28 210 L372 210" stroke="#a0636b" strokeWidth={1.4} opacity={0.5} />
+      <path d="M28 210 L372 210" stroke="#a0636b" strokeWidth={1.4} opacity={0.4} />
       {/* dollhouse cut edge */}
-      <path d="M0 296 L400 296 L400 300 L0 300 Z" fill="#d29f74" />
-      <path d="M0 0 L400 0" stroke="#d29f74" strokeWidth={6} />
+      <path d="M0 296 L400 296 L400 300 L0 300 Z" fill="#fff" opacity={0.9} />
+      <path d="M0 0 L400 0" stroke="#fff" strokeWidth={6} opacity={0.9} />
 
-      <Furniture kind="stringLights" x={200} y={22} />
       {c.house.furniture.map((f, i) => (
         <Furniture key={i} {...f} />
       ))}
