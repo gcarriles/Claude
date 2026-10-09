@@ -6,7 +6,7 @@
 Yuki, Geneva or Danny. Each one has their own session lengths, colors, voice
 and pixel-art room, and you watch them go about their day while you focus.
 
-**Live app:** https://gcarriles.github.io/Claude/ — installable on phone and
+**Live app:** https://pomodoro-press.netlify.app — installable on phone and
 desktop, works offline.
 
 ![Desktop: Geneva's coffee-bar room with the timer running](docs/screenshots/desktop.webp)
@@ -76,7 +76,7 @@ iterating through reviews of each version.
 ## Tech
 
 React, TypeScript, Vite, Web Audio API, PWA (service worker + manifest),
-deployed to GitHub Pages with GitHub Actions.
+hosted on Netlify with automatic deploys from GitHub.
 
 ---
 
@@ -105,12 +105,9 @@ cached on first visit).
 
 ### Hosting
 
-Every push to `main` builds and publishes the app to GitHub Pages
-(`.github/workflows/deploy.yml`); installed copies update themselves on next
-launch. One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
-
-Any other static host works too (build command `npm run build`, output folder
-`dist`).
+Hosted on Netlify. Every push to `main` rebuilds and publishes the app; build
+settings and cache headers live in `netlify.toml`. Installed copies update
+themselves on next launch.
 
 App icons live in `public/` (`icon-192.png`, `icon-512.png`,
 `icon-maskable-512.png`, `apple-touch-icon.png`, `favicon-64.png`); the
