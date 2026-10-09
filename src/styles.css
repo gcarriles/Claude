@@ -85,6 +85,11 @@ button {
 
 /* Phone: one screen at a time */
 @media (max-width: 899px) {
+  /* keep the heading clear of the speaker button */
+  .roster > .kicker,
+  .roster-title {
+    padding-right: 64px;
+  }
   .app.show-roster .col-timer,
   .app.show-timer .col-roster {
     display: none;
@@ -755,6 +760,30 @@ button {
 }
 .music-btn .wave-2 {
   animation-delay: 0.3s;
+}
+/* Sound is still blocked by the browser: gentle bob + a little hint bubble */
+.music-btn.is-waiting {
+  animation: nudge 2.4s ease-in-out infinite;
+}
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+.music-hint {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 10px);
+  transform: translateY(-50%);
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: #fffaf6;
+  border: 1.5px solid #8a6aa8;
+  color: #5d4774;
+  font-family: var(--hand);
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 3px 8px rgba(138, 106, 168, 0.2);
+  pointer-events: none;
 }
 @keyframes wave {
   0%, 100% { opacity: 0.35; }

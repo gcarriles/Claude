@@ -48,7 +48,7 @@ export interface Character {
 export const NUDGE_EVERY_MIN = 5;
 
 // How often (in minutes of focus time) the character moves to a new spot in their house.
-export const ACTIVITY_EVERY_MIN = 2;
+export const ACTIVITY_EVERY_MIN = 1;
 
 export const CHARACTERS: Character[] = [
   {
@@ -79,6 +79,9 @@ export const CHARACTERS: Character[] = [
         { x: 306, y: 158, activity: 'sitting in the sink, as one does', pose: 0, face: 'left' },
         { x: 236, y: 182, activity: 'attacking the yarn', pose: 3, face: 'right' },
         { x: 182, y: 278, activity: 'staring at the food bowl', pose: 0 },
+        { x: 80, y: 191, activity: 'loafing on the low branch', pose: 1, face: 'right' },
+        { x: 208, y: 232, activity: 'sudden floor nap', pose: 2 },
+        { x: 168, y: 260, activity: 'batting the other yarn', pose: 3, face: 'left' },
       ],
       rest: { x: 196, y: 150, activity: 'napping in the moon. lap later.', pose: 2 },
     },
@@ -110,6 +113,9 @@ export const CHARACTERS: Character[] = [
         { x: 86, y: 168, activity: 'stargazing from the sofa', pose: 1, face: 'left' },
         { x: 210, y: 232, activity: 'grooming, very seriously', pose: 3 },
         { x: 286, y: 204, activity: 'guarding the food bowls', pose: 0, face: 'right' },
+        { x: 193, y: 141, activity: 'loafing mid-tree', pose: 1, face: 'left' },
+        { x: 236, y: 170, activity: 'napping under the blossoms', pose: 2 },
+        { x: 300, y: 252, activity: 'patrolling the perimeter', pose: 0, face: 'left' },
       ],
       rest: { x: 110, y: 184, activity: 'accepting one head scratch', pose: 1 },
     },
@@ -141,6 +147,9 @@ export const CHARACTERS: Character[] = [
         { x: 196, y: 246, activity: 'answering the hard email', pose: 0, face: 'left' },
         { x: 262, y: 170, activity: 'reading in the nook', pose: 2 },
         { x: 318, y: 228, activity: 'reshelving the books', pose: 0, face: 'right' },
+        { x: 202, y: 190, activity: 'picking the next book', pose: 0, face: 'right' },
+        { x: 258, y: 240, activity: 'watering the plant. growth mindset.', pose: 0, face: 'right' },
+        { x: 210, y: 270, activity: 'reading on the floor. it counts.', pose: 2 },
       ],
       rest: { x: 262, y: 170, activity: 'five minutes in the nook. four, really.', pose: 3 },
     },
@@ -172,6 +181,9 @@ export const CHARACTERS: Character[] = [
         { x: 184, y: 204, activity: 'tweaking the RGB', pose: 0, face: 'left' },
         { x: 198, y: 94, activity: 'reading up in the loft', pose: 2 },
         { x: 222, y: 250, activity: 'stretching. slowly.', pose: 0 },
+        { x: 300, y: 208, activity: 'admiring the neon. it admires back.', pose: 0, face: 'right' },
+        { x: 262, y: 160, activity: 'halfway up the ladder. taking five.', pose: 0, face: 'left' },
+        { x: 262, y: 248, activity: 'sitting on the floor. vibing.', pose: 1 },
       ],
       rest: { x: 198, y: 94, activity: 'napping in the loft', pose: 3 },
     },
