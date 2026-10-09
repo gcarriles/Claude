@@ -362,14 +362,13 @@ button {
   aspect-ratio: 4 / 3;
   margin-top: 26px; /* room for heads + bubbles above the roof line */
 }
-.room,
 .house-art {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 14px;
-  box-shadow: 0 14px 30px rgba(160, 99, 107, 0.25);
-  object-fit: cover;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 18px rgba(120, 70, 110, 0.28));
+  user-select: none;
 }
 
 .resident {
@@ -463,51 +462,6 @@ button {
   from { opacity: 0; scale: 0.8; }
 }
 
-.pp-bulb {
-  animation: twinkle 3s ease-in-out infinite;
-}
-.pp-glow {
-  animation: flicker 5s ease-in-out infinite;
-}
-.pp-steam {
-  animation: steam 2.4s ease-in-out infinite;
-}
-.pp-dangle {
-  transform-box: fill-box;
-  transform-origin: 50% 0;
-  animation: dangle 3.5s ease-in-out infinite;
-}
-.pp-spin {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: spin 2.5s linear infinite;
-}
-.pp-neon-flicker {
-  animation: neon 6s steps(1) infinite;
-}
-@keyframes dangle {
-  0%, 100% { transform: rotate(-4deg); }
-  50% { transform: rotate(4deg); }
-}
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-@keyframes neon {
-  0%, 100% { opacity: 1; }
-  92% { opacity: 1; }
-  93% { opacity: 0.5; }
-  94% { opacity: 1; }
-  96% { opacity: 0.6; }
-}
-@keyframes flicker {
-  0%, 100% { opacity: 0.85; }
-  50% { opacity: 1; }
-}
-@keyframes steam {
-  0% { opacity: 0; transform: translateY(2px); }
-  50% { opacity: 0.9; }
-  100% { opacity: 0; transform: translateY(-6px); }
-}
 
 /* Bubbly sticker timer: pastel fill, dark outline, misregistered shadow */
 .bubble-timer {

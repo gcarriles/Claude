@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { ACTIVITY_EVERY_MIN, type Character, type Station } from '../characters';
 import type { TimerState } from '../timer';
-import { Furniture, FurnitureDefs } from './furniture';
 import { Portrait } from './Portrait';
 
+// Room space: the house art is shown at 4:3 and spots are given in 400 × 300 units.
 const W = 400;
 const H = 300;
 const WALK_MS = 2200;
+
+const art = (path: string) => `${import.meta.env.BASE_URL}art/${path}`;
 
 /** Which spot the character should be at right now. */
 function currentStation(c: Character, s: TimerState, elapsed: number): Station {
@@ -24,18 +26,46 @@ function bubbleAlign(x: number) {
   return '';
 }
 
-const spriteUrl = (c: Character) => `${import.meta.env.BASE_URL}art/sprites/${c.id}.png`;
+interface Strip {
+  url: string;
+  frames: number;
+  /** one frame's width / height */
+  aspect: number;
+  /** strip height relative to the walk strip (poses can be taller or shorter) */
+  scale: number;
+}
 
-/** Width/height of one sprite frame, or null if the sprite file is missing. */
-function useSpriteAspect(c: Character): number | null {
-  const [aspect, setAspect] = useState<number | null>(null);
-  useEffect(() => {
-    setAspect(null);
+function loadImage(url: string): Promise<HTMLImageElement | null> {
+  return new Promise((resolve) => {
     const img = new Image();
-    img.onload = () => setAspect(img.naturalWidth / c.sprite.frames / img.naturalHeight);
-    img.src = spriteUrl(c);
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+
+/** Loads the walk strip and (optional) pose strip for a character. */
+function useStrips(c: Character) {
+  const [strips, setStrips] = useState<{ walk: Strip | null; poses: Strip | null }>({ walk: null, poses: null });
+  useEffect(() => {
+    let live = true;
+    setStrips({ walk: null, poses: null });
+    const walkUrl = art(`sprites/${c.id}.png`);
+    const posesUrl = art(`sprites/${c.id}-poses.png`);
+    Promise.all([loadImage(walkUrl), loadImage(posesUrl)]).then(([w, p]) => {
+      if (!live || !w) return;
+      const frames = c.sprite.frames;
+      const walk = { url: walkUrl, frames, aspect: w.naturalWidth / frames / w.naturalHeight, scale: 1 };
+      const poses = p
+        ? { url: posesUrl, frames: 4, aspect: p.naturalWidth / 4 / p.naturalHeight, scale: p.naturalHeight / w.naturalHeight }
+        : null;
+      setStrips({ walk, poses });
+    });
+    return () => {
+      live = false;
+    };
   }, [c]);
-  return aspect;
+  return strips;
 }
 
 interface Props {
@@ -50,7 +80,7 @@ export function House({ character: c, state, elapsed }: Props) {
   const [facingLeft, setFacingLeft] = useState(false);
   const [wiggle, setWiggle] = useState(0);
   const prevX = useRef<number | null>(null);
-  const aspect = useSpriteAspect(c);
+  const { walk, poses } = useStrips(c);
 
   // Walk (and face the right way) when moving between spots.
   useEffect(() => {
@@ -63,29 +93,22 @@ export function House({ character: c, state, elapsed }: Props) {
     return () => window.clearTimeout(id);
   }, [station.x, station.y]);
 
-  // Size: sprites use their configured height; the portrait fallback is a square.
-  const size = aspect
-    ? { width: `${((c.sprite.height * aspect) / W) * 100}%`, height: `${(c.sprite.height / H) * 100}%` }
-    : { width: '22%', height: `${((W * 0.22) / H) * 100}%` };
+  // While walking use the walk cycle; once there, use the spot's pose (or walk frame 1).
+  const usePose = !walking && poses && station.pose !== undefined;
+  const strip = usePose ? poses : walk;
+  const frame = usePose ? station.pose! : 0;
+  const left = !walking && station.face ? station.face === 'left' : facingLeft;
 
-  // Optional painted house: drop public/art/house-<id>.png in and it replaces the drawn room.
-  const [painted, setPainted] = useState(false);
-  useEffect(() => {
-    setPainted(false);
-    const img = new Image();
-    img.onload = () => setPainted(true);
-    img.src = `${import.meta.env.BASE_URL}art/house-${c.id}.png`;
-  }, [c.id]);
+  const heightUnits = c.sprite.height * (strip?.scale ?? 1);
+  const size = strip
+    ? { width: `${((heightUnits * strip.aspect) / W) * 100}%`, height: `${(heightUnits / H) * 100}%` }
+    : { width: '22%', height: `${((W * 0.22) / H) * 100}%` };
 
   const resting = state.phase !== 'focus';
 
   return (
     <div className="house">
-      {painted ? (
-        <img className="house-art" src={`${import.meta.env.BASE_URL}art/house-${c.id}.png`} alt="" />
-      ) : (
-        <Room character={c} />
-      )}
+      <img className="house-art" src={art(`house-${c.id}.png`)} alt="" draggable={false} />
 
       <button
         className={`resident${walking ? ' is-walking' : ''}${resting ? ' is-resting' : ''}`}
@@ -97,14 +120,15 @@ export function House({ character: c, state, elapsed }: Props) {
           {station.activity}
         </span>
         <span className={`resident-body${wiggle ? ' wiggle' : ''}`} key={wiggle}>
-          {aspect ? (
+          {strip ? (
             <span
-              className={`sprite${facingLeft ? ' face-left' : ''}`}
+              className={`sprite${left ? ' face-left' : ''}`}
               style={{
-                backgroundImage: `url(${spriteUrl(c)})`,
-                backgroundSize: `${c.sprite.frames * 100}% 100%`,
-                animationTimingFunction: `steps(${c.sprite.frames})`,
-                ['--walk-end' as string]: `${(c.sprite.frames / (c.sprite.frames - 1)) * 100}%`,
+                backgroundImage: `url(${strip.url})`,
+                backgroundSize: `${strip.frames * 100}% 100%`,
+                backgroundPosition: `${(frame / (strip.frames - 1)) * 100}% 0`,
+                animationTimingFunction: `steps(${strip.frames})`,
+                ['--walk-end' as string]: `${(strip.frames / (strip.frames - 1)) * 100}%`,
               }}
             />
           ) : (
@@ -114,37 +138,5 @@ export function House({ character: c, state, elapsed }: Props) {
         <span className="resident-shadow" />
       </button>
     </div>
-  );
-}
-
-function Room({ character: c }: { character: Character }) {
-  const th = c.house.theme;
-  return (
-    <svg className="room" viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-      <FurnitureDefs />
-      {/* side walls */}
-      <path d="M0 0 L28 14 L28 210 L0 296 Z" fill={th.side} />
-      <path d="M400 0 L372 14 L372 210 L400 296 Z" fill={th.side} />
-      {/* back wall + wallpaper */}
-      <rect x={28} y={14} width={344} height={196} fill={th.wall} />
-      <rect x={28} y={14} width={344} height={196} fill="url(#pp-wallpaper)" opacity={0.6} />
-      <rect x={28} y={150} width={344} height={60} fill={th.band} />
-      <rect x={28} y={148} width={344} height={4} fill="#ffffff" opacity={0.45} />
-      {/* floor */}
-      <path d="M28 210 L372 210 L400 296 L0 296 Z" fill={th.floor} />
-      {[230, 252, 276].map((y) => (
-        <line key={y} x1={0} y1={y} x2={W} y2={y} stroke={th.floorLine} strokeWidth={1} />
-      ))}
-      <path d="M28 210 L372 210" stroke="#a0636b" strokeWidth={1.4} opacity={0.4} />
-      {/* dollhouse cut edge */}
-      <path d="M0 296 L400 296 L400 300 L0 300 Z" fill="#fff" opacity={0.9} />
-      <path d="M0 0 L400 0" stroke="#fff" strokeWidth={6} opacity={0.9} />
-
-      {c.house.furniture.map((f, i) => (
-        <Furniture key={i} {...f} />
-      ))}
-      {/* warm light from the window side */}
-      <rect x={0} y={0} width={W} height={H} fill="url(#pp-glow)" opacity={0.25} />
-    </svg>
   );
 }

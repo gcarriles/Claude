@@ -22,36 +22,36 @@ URL on a phone on the same Wi-Fi.
 | What | Where |
 |---|---|
 | Characters: names, roles, minutes, colors, all copy | `src/characters.ts` |
-| Each character's house: furniture, spots, activities | `house` in `src/characters.ts` |
+| Each character's spots in their house, activities and poses | `house` in `src/characters.ts` |
 | How often the running nudge changes (default 5 min) | `NUDGE_EVERY_MIN` in `src/characters.ts` |
 | How often they move to a new spot (default 2 min) | `ACTIVITY_EVERY_MIN` in `src/characters.ts` |
-| Portraits for the roster (transparent cut-outs) | `public/art/<id>.png` (e.g. `mochi.png`). Missing file → initials in the character's ink |
-| Walking sprites used in the houses | `public/art/sprites/<id>.png` — one horizontal strip of walk frames; set `sprite.frames` and `sprite.height` in `src/characters.ts`. Missing file → the portrait is used instead |
-| Room colors (wall, stripe, floor) | `house.theme` in `src/characters.ts` |
-| Furniture drawings | `src/components/furniture.tsx` |
+| House art | `public/art/house-<id>.png` — transparent background, 4:3 (1200 × 900) |
+| Walk cycle | `public/art/sprites/<id>.png` — 4 frames side by side, facing right |
+| Poses | `public/art/sprites/<id>-poses.png` — 4 frames side by side, facing right, same scale as the walk strip |
+| Roster portraits | `public/art/<id>.png` (transparent cut-outs). Missing file → initials in the character's ink |
 | Colors, fonts, sky, layout | `src/styles.css` (font choices are the `--display`, `--hand`, `--timer`, `--body` variables) |
-| Timer rules (focus → break → … → set complete) | `src/timer.ts` |
 
-To add a character, add an entry to `CHARACTERS` and drop `public/art/<id>.png` in.
+To add a character, add an entry to `CHARACTERS` and drop their art files in.
 
 ### Houses
 
-Each character has a little room. While focus runs, they hop between the
-`stations` in their `house` config (one every `ACTIVITY_EVERY_MIN` minutes),
-with a speech bubble saying what they're up to. On break and at the end of a
-set they go to their `rest` spot. Tap them in the house (or in the roster) to
-make them wiggle.
+Each character lives in their own room. While focus runs, they walk between
+the `stations` in their `house` config (one every `ACTIVITY_EVERY_MIN`
+minutes) with a speech bubble saying what they're up to. Once they arrive they
+switch to that spot's `pose`:
 
-Characters walk between spots using their sprite strip (and turn to face
-the way they're going), then stand on frame 1 while they're "doing" the
-activity.
+- People: `0` stand, `1` sit, `2` read, `3` sleep
+- Cats: `0` stand, `1` loaf, `2` sleep, `3` stretch
 
-The room is 400 × 300 units. `x` runs left → right, `y` top → bottom, and a
-station's `y` is where the character's feet/bottom sit.
+On break and at the end of a set they go to their `rest` spot. Tap them (in
+the house or the roster) to make them wiggle.
 
-**Using painted house art instead:** drop `public/art/house-<id>.png` in (4:3,
-e.g. 1200 × 900) and it replaces the drawn room automatically. Adjust the
-station `x`/`y` values to line up with your art.
+Spots use 400 × 300 units laid over the 4:3 house art: `x` runs left → right,
+`y` top → bottom, and `y` is where their feet (or bottom) sit. `face` turns
+them left/right once they arrive.
+
+If you replace a house image, re-check the spots — they're placed by eye on
+the current art.
 
 ### Opening screen
 
