@@ -1,8 +1,8 @@
 import { NUDGE_EVERY_MIN, type Character } from '../characters';
 import { formatClock, formatMinutes, type TimerState } from '../timer';
 import { Pips } from './Pips';
-import { PixelTimer } from './PixelTimer';
-import { Portrait } from './Portrait';
+import { BubbleTimer } from './BubbleTimer';
+import { House } from './House';
 
 interface Props {
   character: Character;
@@ -29,7 +29,7 @@ export function TimerView(p: Props) {
       </button>
 
       <div className="stage">
-        <Portrait character={c} size={220} />
+        <House key={c.id} character={c} state={s} elapsed={p.elapsed} />
         <div className="stage-main">
           <p className="kicker">
             {c.role} · {s.phase === 'focus' ? 'Focus' : s.phase === 'break' ? 'Break' : 'Set complete'}
@@ -60,7 +60,7 @@ function Running(p: Props) {
 
   return (
     <>
-      <PixelTimer text={formatClock(p.remaining)} label={`${formatClock(p.remaining)} remaining`} />
+      <BubbleTimer text={formatClock(p.remaining)} label={`${formatClock(p.remaining)} remaining`} />
       <Pips total={p.sessionsPerSet} session={s.session} phase={s.phase} />
       <p className="line" key={line}>
         {line}

@@ -1,4 +1,19 @@
-// The household. Edit names, minutes, colors and copy here.
+// The household. Edit names, minutes, colors, copy and houses here.
+
+import type { FurnitureKind } from './components/furniture';
+
+/** A spot in the house the character can hang out at. Room is 400 × 300; y is where they stand. */
+export interface Station {
+  x: number;
+  y: number;
+  activity: string;
+}
+
+export interface House {
+  furniture: { kind: FurnitureKind; x: number; y: number; scale?: number }[];
+  stations: Station[]; // visited in order while focus runs
+  rest: Station; // where they go on break and when the set is done
+}
 
 export interface Character {
   id: string;
@@ -20,10 +35,14 @@ export interface Character {
     done: string;
     streak: string; // reserved for the streaks feature (not shown yet)
   };
+  house: House;
 }
 
 // How often (in minutes of focus time) the running nudge line changes.
 export const NUDGE_EVERY_MIN = 5;
+
+// How often (in minutes of focus time) the character moves to a new spot in their house.
+export const ACTIVITY_EVERY_MIN = 2;
 
 export const CHARACTERS: Character[] = [
   {
@@ -46,6 +65,24 @@ export const CHARACTERS: Character[] = [
       done: 'Four rounds, zero belly rubs. Noted.',
       streak: 'Another day, another loaf. Consistency is my brand.',
     },
+    house: {
+      furniture: [
+        { kind: 'window', x: 120, y: 125 },
+        { kind: 'catTree', x: 52, y: 238 },
+        { kind: 'desk', x: 292, y: 215 },
+        { kind: 'tableLamp', x: 330, y: 165 },
+        { kind: 'plant', x: 372, y: 228 },
+        { kind: 'rug', x: 175, y: 262 },
+        { kind: 'bowl', x: 250, y: 284 },
+      ],
+      stations: [
+        { x: 270, y: 166, activity: 'sitting on your keyboard' },
+        { x: 175, y: 262, activity: 'loafing in the sunbeam' },
+        { x: 52, y: 112, activity: 'supervising from the cat tree' },
+        { x: 250, y: 284, activity: 'staring at the food bowl' },
+      ],
+      rest: { x: 175, y: 262, activity: 'lap time. get in position.' },
+    },
   },
   {
     id: 'yuki',
@@ -66,6 +103,24 @@ export const CHARACTERS: Character[] = [
       break: 'Five minutes. You may have one head scratch.',
       done: 'Adequate. You may now approach.',
       streak: 'You came back. I noticed. I will not say more.',
+    },
+    house: {
+      furniture: [
+        { kind: 'window', x: 150, y: 128 },
+        { kind: 'frame', x: 248, y: 100 },
+        { kind: 'bookshelf', x: 330, y: 215 },
+        { kind: 'floorLamp', x: 40, y: 226 },
+        { kind: 'plant', x: 232, y: 222 },
+        { kind: 'rug', x: 200, y: 266 },
+        { kind: 'catBed', x: 95, y: 270 },
+      ],
+      stations: [
+        { x: 330, y: 71, activity: "on the top shelf. don't look." },
+        { x: 150, y: 128, activity: 'staring out the window' },
+        { x: 200, y: 266, activity: 'grooming, very seriously' },
+        { x: 250, y: 226, activity: 'inspecting the plant' },
+      ],
+      rest: { x: 95, y: 262, activity: 'accepting one head scratch' },
     },
   },
   {
@@ -88,6 +143,24 @@ export const CHARACTERS: Character[] = [
       done: 'Done is done. Next.',
       streak: 'Streak alive. Protect it.',
     },
+    house: {
+      furniture: [
+        { kind: 'window', x: 315, y: 120 },
+        { kind: 'desk', x: 95, y: 215 },
+        { kind: 'tableLamp', x: 130, y: 165 },
+        { kind: 'vanity', x: 205, y: 212 },
+        { kind: 'plant', x: 26, y: 232 },
+        { kind: 'bed', x: 318, y: 252 },
+        { kind: 'rug', x: 170, y: 270 },
+      ],
+      stations: [
+        { x: 80, y: 222, activity: 'answering the hard email' },
+        { x: 205, y: 222, activity: 'tidying the vanity' },
+        { x: 40, y: 262, activity: 'watering the plants' },
+        { x: 318, y: 228, activity: 'making the bed. hospital corners.' },
+      ],
+      rest: { x: 330, y: 222, activity: 'five minutes horizontal. four, really.' },
+    },
   },
   {
     id: 'danny',
@@ -108,6 +181,25 @@ export const CHARACTERS: Character[] = [
       break: 'Take fifteen. Take eighteen. Who is counting.',
       done: "See? Got there. Told you it wasn't a race.",
       streak: 'Look at us, showing up. Again. Casually.',
+    },
+    house: {
+      furniture: [
+        { kind: 'window', x: 150, y: 120 },
+        { kind: 'shortShelf', x: 260, y: 212 },
+        { kind: 'recordPlayer', x: 340, y: 214 },
+        { kind: 'floorLamp', x: 44, y: 240 },
+        { kind: 'plant', x: 380, y: 236 },
+        { kind: 'couch', x: 150, y: 252 },
+        { kind: 'rug', x: 215, y: 276 },
+        { kind: 'coffeeTable', x: 250, y: 286 },
+      ],
+      stations: [
+        { x: 130, y: 226, activity: 'reading a book on the couch' },
+        { x: 340, y: 230, activity: 'flipping the record' },
+        { x: 200, y: 276, activity: 'sweeping. slowly.' },
+        { x: 260, y: 230, activity: 'browsing for a different book' },
+      ],
+      rest: { x: 150, y: 226, activity: 'horizontal on the couch' },
     },
   },
 ];

@@ -1,8 +1,9 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { getCharacter } from './characters';
 import { loadSettings, saveSettings, type Settings } from './storage';
 import { formatClock, type PhaseEndEvent } from './timer';
 import { useTimer } from './useTimer';
+import { Loader } from './components/Loader';
 import { Roster } from './components/Roster';
 import { SettingsPanel } from './components/SettingsPanel';
 import { Sky } from './components/Sky';
@@ -25,9 +26,13 @@ export default function App() {
       : 'timer',
   );
 
+  const [loading, setLoading] = useState(true);
+  const finishLoading = useCallback(() => setLoading(false), []);
+
   const pick = (id: string) => {
     if (id !== timer.state.characterId) timer.newSet(id);
-    setMobileScreen('timer');
+    // Let the wiggle play before the phone swaps screens.
+    window.setTimeout(() => setMobileScreen('timer'), 420);
   };
 
   // Countdown in the tab title.
@@ -47,6 +52,7 @@ export default function App() {
   return (
     <div className={`app show-${mobileScreen}`} style={vars}>
       <Sky />
+      {loading && <Loader onDone={finishLoading} />}
       <aside className="col-roster">
         <Roster activeId={character.id} onPick={pick} />
         <SettingsPanel settings={settings} onChange={setSettings} />

@@ -1,28 +1,25 @@
 import { useEffect, useState } from 'react';
 import type { Character } from '../characters';
 
-export function Portrait({ character, size }: { character: Character; size: number }) {
+/** Cut-out character art. Without `size` it fills its parent. */
+export function Portrait({ character, size }: { character: Character; size?: number }) {
   const [missing, setMissing] = useState(false);
   useEffect(() => setMissing(false), [character.id]);
 
   return (
-    <div className="portrait" style={{ width: size, height: size }}>
+    <span className="portrait" style={size ? { width: size, height: size } : undefined}>
       {missing ? (
-        <span
-          className="portrait-initials"
-          style={{ color: character.colors.ink, fontSize: size * 0.36 }}
-        >
+        <span className="portrait-initials" style={{ color: character.colors.ink }}>
           {character.initials}
         </span>
       ) : (
         <img
           src={`${import.meta.env.BASE_URL}art/${character.id}.png`}
           alt={character.name}
-          width={size}
-          height={size}
+          draggable={false}
           onError={() => setMissing(true)}
         />
       )}
-    </div>
+    </span>
   );
 }
