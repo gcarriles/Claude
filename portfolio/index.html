@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Geneva Carriles, UGC creator in Austin, TX. Cozy, real-life videos for WFH, beauty, coffee and tech brands.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Geneva Carriles UGC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: one warm column like a kitchen table — phone-frame hero, hook wall of 9:16 cards, a timed breakdown, then a rate card. */
+:root {
+  --bg: #F3ECDD;          /* cream */
+  --surface: #FBF7EE;     /* light cream */
+  --ink: #2E3224;         /* deep olive ink */
+  --ink-soft: #5F6451;
+  --line: #DCD3BE;
+  --olive: #5A6633;       /* olive green: buttons and big blocks */
+  --olive-ink: #FBF7EE;
+  --cream-deep: #EADFC8; /* deeper cream for big blocks */
+  --jam: #9B3B5A;         /* maroon pink: small details */
+  --butter: #EBCAD1;      /* highlighter, soft maroon pink */
+  --sage: #7C8656;
+  --beauty: #E6CBC6; --home: #E5D8BC; --fitfood: #CACDA8; --tech: #D7D3BF;
+  --display: "Young Serif", Georgia, "Times New Roman", serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --hand: "Caveat", "Segoe Print", cursive;
+  --step--1: .875rem; --step-0: 1rem; --step-1: 1.25rem; --step-2: 1.75rem; --step-3: 2.5rem; --step-4: clamp(2.6rem, 6vw, 4.4rem);
+}
+/* Always cream: the brand look stays the same in dark mode */
+:root, :root[data-theme="dark"] { color-scheme: light; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: var(--step-0); line-height: 1.6; margin: 0; }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.1; text-wrap: balance; margin: 0; }
+h2 { font-size: var(--step-3); }
+p { margin: 0; }
+a { color: inherit; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--jam); outline-offset: 3px; border-radius: 6px; }
+.label { font-size: var(--step--1); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.note { font-family: var(--hand); font-size: 1.5rem; color: var(--jam); line-height: 1.1; }
+.hl { background: linear-gradient(transparent 58%, var(--butter) 58%, var(--butter) 92%, transparent 92%); padding-inline: .1em; }
+section { padding-block: clamp(56px, 8vw, 96px); }
+.section-head { display: grid; gap: 12px; max-width: 640px; margin-bottom: 36px; }
+.section-head p { color: var(--ink-soft); }
+
+/* Nav */
+nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-block: 22px; flex-wrap: wrap; }
+.wordmark { font-family: var(--display); font-size: var(--step-1); text-decoration: none; }
+.wordmark span { color: var(--jam); }
+.nav-links { display: flex; gap: 22px; flex-wrap: wrap; font-weight: 500; }
+.nav-links a { text-decoration: none; color: var(--ink-soft); }
+.nav-links a:hover { color: var(--ink); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: clamp(32px, 6vw, 72px); align-items: center; padding-block: 24px 72px; }
+.hero h1 { font-size: var(--step-4); }
+.hero-copy { display: grid; gap: 24px; }
+.hero-copy > p { font-size: var(--step-1); color: var(--ink-soft); max-width: 34ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 14px; font-size: var(--step--1); font-weight: 500; background: var(--surface); }
+.cta-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.btn { display: inline-block; background: var(--surface); color: var(--olive); box-shadow: inset 0 0 0 1.5px var(--olive); text-decoration: none; font-weight: 600; padding: 14px 26px; border-radius: 999px; border: 0; font: inherit; cursor: pointer; }
+.btn:hover { background: var(--cream-deep); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+
+.phone-stage { position: relative; justify-self: center; width: min(460px, 100%); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.phone-fig { margin: 0; display: grid; gap: 14px; justify-items: center; }
+.phone-fig figcaption { font-size: var(--step--1); font-weight: 600; color: var(--ink-soft); text-align: center; }
+.phone { aspect-ratio: 9 / 16; width: 100%; border-radius: 30px; border: 8px solid var(--ink); background: var(--beauty); overflow: hidden; position: relative; box-shadow: 0 24px 50px -24px rgba(46, 50, 36, .55); cursor: pointer; }
+.about { display: flex; flex-wrap: wrap; gap: 8px 18px; font-weight: 500; color: var(--ink); }
+.about span::before { content: "•"; color: var(--jam); margin-right: 8px; }
+.phone video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.phone .placeholder-inner { position: absolute; inset: 0; display: grid; align-content: end; padding: 22px; gap: 10px; }
+.caption-bubble { background: var(--surface); color: var(--ink); font-weight: 700; padding: 8px 12px; border-radius: 10px; font-size: .95rem; width: fit-content; max-width: 100%; }
+.phone-stage .note { position: absolute; left: -96px; top: 34px; transform: rotate(-8deg); width: 120px; }
+.phone-stage .note::after { content: "→"; display: block; font-size: 1.8rem; transform: rotate(20deg); margin-left: 60px; }
+
+/* Hook wall */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+.filter { font: inherit; font-weight: 600; font-size: var(--step--1); padding: 8px 16px; border-radius: 999px; border: 1.5px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.filter[aria-pressed="true"] { background: var(--cream-deep); color: var(--olive); border-color: var(--olive); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; }
+.card { display: grid; gap: 12px; }
+.frame { aspect-ratio: 9 / 16; max-width: 100%; border-radius: 22px; overflow: hidden; position: relative; background: var(--home); cursor: pointer; border: 0; padding: 0; width: 100%; text-align: left; font: inherit; color: var(--ink); }
+.frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.frame .ph { position: absolute; inset: 0; display: grid; align-content: space-between; padding: 18px; }
+.frame .ph .hook { font-family: var(--display); font-size: 1.45rem; line-height: 1.15; text-wrap: balance; }
+.frame .ph small { font-size: .8rem; opacity: .75; }
+.frame .badge { position: absolute; top: 12px; right: 12px; background: var(--surface); color: var(--jam); font-size: .75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.frame .play { position: absolute; bottom: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); display: grid; place-items: center; }
+.frame .play::before { content: ""; border-left: 13px solid var(--jam); border-top: 8px solid transparent; border-bottom: 8px solid transparent; margin-left: 4px; }
+.frame.playing .play { opacity: 0; }
+.frame .spec { position: absolute; top: 12px; left: 12px; background: var(--jam); color: var(--surface); font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+.tabs { display: flex; gap: 28px; border-bottom: 1.5px solid var(--line); margin-bottom: 24px; }
+.tab { font: inherit; font-family: var(--display); font-size: var(--step-1); background: none; border: 0; padding: 0 0 12px; margin-bottom: -1.5px; color: var(--ink-soft); cursor: pointer; border-bottom: 3px solid transparent; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--jam); }
+.spec-note { margin-top: 22px; color: var(--ink-soft); font-size: var(--step--1); max-width: 60ch; }
+.card-meta { display: grid; gap: 2px; }
+.card-meta strong { font-weight: 600; }
+.card-meta span { color: var(--ink-soft); font-size: var(--step--1); }
+.n-beauty { background: var(--beauty); } .n-home { background: var(--home); } .n-fitfood { background: var(--fitfood); } .n-tech { background: var(--tech); }
+
+/* Breakdown */
+.breakdown { background: var(--surface); border-radius: 28px; padding: clamp(24px, 4vw, 48px); display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(28px, 5vw, 56px); align-items: start; }
+.breakdown .intro { display: grid; gap: 14px; }
+.breakdown .intro p { color: var(--ink-soft); }
+.timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.timeline li { display: grid; grid-template-columns: 84px 1fr; gap: 18px; padding-block: 18px; border-top: 1.5px dashed var(--line); }
+.timeline li:first-child { border-top: 0; padding-top: 0; }
+.ts { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--jam); }
+.timeline h3 { font-family: var(--body); font-weight: 700; font-size: var(--step-0); margin-bottom: 4px; }
+.timeline p { color: var(--ink-soft); }
+
+/* Formats */
+.formats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0; border-top: 1.5px solid var(--olive); }
+.format { padding: 22px 22px 22px 0; border-bottom: 1.5px solid var(--line); display: grid; gap: 6px; }
+.format h3 { font-size: var(--step-1); }
+.format p { color: var(--ink-soft); font-size: var(--step--1); }
+
+/* Process */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 28px; counter-reset: s; }
+.step { display: grid; gap: 8px; align-content: start; }
+.step::before { counter-increment: s; content: counter(s); font-family: var(--display); font-size: var(--step-3); color: var(--jam); line-height: 1; }
+.step h3 { font-family: var(--body); font-weight: 700; font-size: var(--step-0); }
+.step p { color: var(--ink-soft); font-size: var(--step--1); }
+
+/* Rates */
+.rates { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; align-items: stretch; }
+.rate { border: 1.5px solid var(--line); border-radius: 22px; padding: 28px; display: grid; gap: 14px; align-content: start; background: var(--bg); }
+.rate.featured { background: var(--surface); border-color: var(--jam); border-width: 2px; position: relative; }
+.rate.featured .note { position: absolute; top: -20px; right: 18px; transform: rotate(4deg); background: var(--bg); padding-inline: 8px; }
+.rate .price { font-family: var(--display); font-size: var(--step-3); font-variant-numeric: tabular-nums; color: var(--olive); }
+.rate .price small { font-family: var(--body); font-size: var(--step--1); color: var(--ink-soft); }
+.rate ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; color: var(--ink-soft); font-size: var(--step--1); }
+.rate ul li::marker { color: var(--jam); }
+.addons { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+/* Contact */
+.contact { background: var(--cream-deep); color: var(--ink); border-radius: 32px; padding: clamp(32px, 6vw, 72px); display: grid; gap: 22px; justify-items: start; }
+.contact h2 { font-size: var(--step-4); max-width: 14ch; color: var(--olive); }
+.contact p { max-width: 46ch; opacity: .9; }
+.contact .btn { background: var(--surface); color: var(--jam); box-shadow: inset 0 0 0 1.5px var(--jam); }
+.contact .socials { display: flex; flex-wrap: wrap; gap: 20px; font-weight: 600; }
+.contact .email { font-size: var(--step-1); font-weight: 600; user-select: all; }
+footer { padding-block: 32px 48px; color: var(--ink-soft); font-size: var(--step--1); }
+
+@media (max-width: 820px) {
+  .hero, .breakdown { grid-template-columns: 1fr; }
+  .phone-stage { width: min(420px, 100%); gap: 12px; }
+  .phone { border-width: 6px; border-radius: 24px; }
+  .phone-stage .note { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav aria-label="Main">
+    <a class="wordmark" href="#top" id="wordmark">Geneva Carriles<span>.</span></a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#breakdown">How I build a video</a>
+      <a href="#rates">Rates</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.tiktok.com/@the.geneva.method" target="_blank" rel="noopener">TikTok ↗</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="label">UGC creator · WFH life · Beauty · Coffee &amp; food · Tech</p>
+      <h1>I make your product feel like it <span class="hl">already lives here</span>.</h1>
+      <p>Cozy, real-life videos filmed in an actual home, with hooks written to stop the scroll in the first 2 seconds.</p>
+      <p class="about"><span>Based in Austin, TX</span><span>Works in tech</span><span>Two cats, Mochi &amp; Yuki</span></p>
+      <div class="facts">
+        <span class="chip">9:16 vertical</span>
+        <span class="chip">5-day turnaround</span>
+        <span class="chip">Raw footage available</span>
+      </div>
+      <div class="cta-row">
+        <a class="btn" href="#contact">Work with me</a>
+        <a class="btn ghost" href="#work">Watch the videos</a>
+      </div>
+    </div>
+    <div class="phone-stage">
+      <p class="note">tap to play with sound</p>
+      <figure class="phone-fig"><div class="phone" id="heroPhone2"></div><figcaption>Desk setup tour</figcaption></figure>
+      <figure class="phone-fig"><div class="phone" id="heroPhone"></div><figcaption>5am WFH routine</figcaption></figure>
+    </div>
+  </header>
+</div>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label">The hook wall</p>
+      <h2>Every video starts with a hook. Here are mine.</h2>
+      <p>Filter by niche. Each card shows the opening line, the format, and the length, so you can see how I'd open an ad for your product.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Portfolio sections">
+      <button class="tab" role="tab" id="tab-main" aria-selected="true">Lifestyle UGC</button>
+      <button class="tab" role="tab" id="tab-spec" aria-selected="false">Spec ads</button>
+    </div>
+    <div class="filters" role="group" aria-label="Filter videos by niche" id="filters"></div>
+    <div class="grid" id="grid"></div>
+    <p class="spec-note" id="specNote" hidden>Spec ads are videos I made on my own to show how I'd advertise a brand. They aren't sponsored or affiliated with the brand.</p>
+  </div>
+</section>
+
+<section id="breakdown">
+  <div class="wrap">
+    <div class="breakdown">
+      <div class="intro">
+        <p class="label">Video breakdown</p>
+        <h2>What happens in 30 seconds</h2>
+        <p>Every second has a job. This is the structure I use for a testimonial-style ad, timed to the second.</p>
+        <p class="note">this is the part most creators skip</p>
+      </div>
+      <ol class="timeline">
+        <li><span class="ts">0:00–0:02</span><div><h3>Hook</h3><p>A relatable line or visual that stops the scroll in the first two seconds.</p></div></li>
+        <li><span class="ts">0:02–0:08</span><div><h3>The problem</h3><p>The everyday frustration your customer already feels, shown in a real space.</p></div></li>
+        <li><span class="ts">0:08–0:22</span><div><h3>Product in use</h3><p>Close-up demo, texture shots and honest reactions. Your key benefits are said out loud and shown as on-screen text.</p></div></li>
+        <li><span class="ts">0:22–0:27</span><div><h3>Proof</h3><p>A before-and-after, a result or a "two weeks later" moment.</p></div></li>
+        <li><span class="ts">0:27–0:30</span><div><h3>Call to action</h3><p>A clear next step that matches your offer and landing page.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label">Formats</p>
+      <h2>What I make</h2>
+    </div>
+    <div class="formats">
+      <div class="format"><h3>Testimonials</h3><p>Talking to camera, like telling a friend what you love.</p></div>
+      <div class="format"><h3>Unboxing &amp; first impressions</h3><p>Real reactions with packaging and texture close-ups.</p></div>
+      <div class="format"><h3>Get ready with me</h3><p>Your product worked into a natural routine.</p></div>
+      <div class="format"><h3>Product demos</h3><p>How it works, step by step, with on-screen text.</p></div>
+      <div class="format"><h3>ASMR &amp; aesthetic</h3><p>No talking. Satisfying sounds and cozy visuals.</p></div>
+      <div class="format"><h3>Photos</h3><p>Lifestyle and product stills for ads, sites and listings.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label">Process</p>
+      <h2>From brief to finished files in 5 days</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Brief</h3><p>You send the product, your audience and any must-say points.</p></div>
+      <div class="step"><h3>Script &amp; hooks</h3><p>I send a short script and the opening hook for you to approve.</p></div>
+      <div class="step"><h3>Filming</h3><p>Shot in natural light in my home, with lots of b-roll.</p></div>
+      <div class="step"><h3>Edit</h3><p>Captions, cuts and pacing tuned for TikTok, Reels and Shorts.</p></div>
+      <div class="step"><h3>Delivery</h3><p>Final videos in a shared folder, with one round of revisions included.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="rates">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="label">Rates</p>
+      <h2>Packages</h2>
+      <p>Prices include organic usage on your own channels. Paid ad usage is an add-on.</p>
+    </div>
+    <div class="rates">
+      <div class="rate">
+        <p class="label">Starter</p>
+        <p class="price">$175 <small>/ 1 video</small></p>
+        <ul><li>1 video, up to 60 seconds</li><li>On-screen captions</li><li>1 round of revisions</li></ul>
+      </div>
+      <div class="rate featured">
+        <p class="note">most brands pick this</p>
+        <p class="label">Bundle</p>
+        <p class="price">$450 <small>/ 3 videos</small></p>
+        <ul><li>3 videos in different formats</li><li>5 product photos</li><li>1 round of revisions</li></ul>
+      </div>
+      <div class="rate">
+        <p class="label">Monthly</p>
+        <p class="price">$800 <small>/ month</small></p>
+        <ul><li>6 videos per month</li><li>New hooks every batch</li><li>Raw footage included</li><li>Priority 3-day turnaround</li></ul>
+      </div>
+    </div>
+    <div class="addons">
+      <span class="label">Add-ons</span>
+      <span class="chip">Extra hook versions for A/B testing</span>
+      <span class="chip">Raw footage +$50</span>
+      <span class="chip">Paid ad usage, 30 days +$100</span>
+      <span class="chip">Whitelisting +$150 / month</span>
+      <span class="chip">Rush 48h +$75</span>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <p class="label" style="color: inherit; opacity: .8;">Let's work together</p>
+      <h2>Send me your product. I'll make it feel at home.</h2>
+      <p>Tell me what you're launching and who it's for. I'll reply within 24 hours with hook ideas.</p>
+      <p class="email" id="email">geneva.method@gmail.com</p>
+      <div class="cta-row">
+        <a class="btn" id="emailBtn" href="mailto:geneva.method@gmail.com">Email me</a>
+        <a class="btn" href="https://www.tiktok.com/@the.geneva.method" target="_blank" rel="noopener">TikTok @the.geneva.method</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">© <span id="year"></span> <span id="footerName">Geneva Carriles</span> · UGC creator in Austin, TX · <a href="https://www.tiktok.com/@the.geneva.method" target="_blank" rel="noopener">@the.geneva.method</a></footer>
+
+<script>
+/* ===== EDIT YOUR DETAILS HERE ===== */
+const CONFIG = {
+  name: "Geneva Carriles",
+  email: "geneva.method@gmail.com",
+  // Hero phone video: put a file in the videos folder, e.g. "videos/hero.mp4"
+  heroVideo: "videos/v08.mp4",
+  heroHook: "POV: you finally found a moisturizer that doesn't pill"
+};
+
+/* Your videos. Add the file path in `src` (e.g. "videos/serum.mp4") and it replaces the placeholder.
+   niche: "beauty" | "home" | "fitfood" | "tech" */
+const VIDEOS = [
+  { src: "videos/v02.mp4", niche: "tech",    format: "Product demo",       length: "0:09", hook: "Why you should get the Logitech Wave keyboard", spec: true },
+  { src: "videos/v15.mp4", niche: "beauty",  format: "Product demo",       length: "0:31", hook: "The best affordable gold jewelry", spec: true },
+  { src: "videos/v10.mp4", niche: "home",    format: "Talking to camera",  length: "0:28", hook: "Here's your WFH to-do list, and none of it is work" },
+  { src: "videos/v14.mp4", niche: "beauty",  format: "ASMR",               length: "0:14", hook: "No talking, just the glow", spec: true },
+  { src: "videos/v07.mp4", niche: "home",    format: "Relatable skit",     length: "0:16", hook: "My morning did not go to plan" },
+  { src: "videos/v09.mp4", niche: "fitfood", format: "Recipe demo",        length: "0:08", hook: "Coffee time" },
+  { src: "videos/v12.mp4", niche: "tech",    format: "ASMR desk reset",    length: "0:30", hook: "Everything that lives on my WFH desk" },
+  { src: "videos/v06.mp4", niche: "fitfood", format: "Aesthetic",          length: "0:05", hook: "Your sign to take a coffee break" }
+];
+/* ================================== */
+
+const NICHES = { all: "All", beauty: "Beauty & style", home: "WFH life", fitfood: "Coffee & food", tech: "Tech & desk" };
+
+function videoEl(src) {
+  const v = document.createElement("video");
+  v.poster = src.replace(/\.mp4$/, ".jpg");
+  v.src = src; v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata";
+  return v;
+}
+function attachPlay(frame, v) {
+  frame.addEventListener("click", () => {
+    if (v.paused) {
+      document.querySelectorAll("video").forEach(o => { if (o !== v) { o.pause(); o.closest(".frame, .phone")?.classList.remove("playing"); } });
+      v.muted = false; v.play(); frame.classList.add("playing");
+    } else { v.pause(); frame.classList.remove("playing"); }
+  });
+}
+
+// Hero
+const phone = document.getElementById("heroPhone");
+{ const p2 = document.getElementById("heroPhone2"); const v2 = videoEl("videos/main.mp4"); p2.appendChild(v2); attachPlay(p2, v2); }
+if (CONFIG.heroVideo) { const v = videoEl(CONFIG.heroVideo); phone.appendChild(v); attachPlay(phone, v); phone.style.cursor = "pointer"; }
+else { phone.innerHTML = `<div class="placeholder-inner"><span class="caption-bubble"></span><span class="caption-bubble">wait for it…</span></div>`; phone.querySelector(".caption-bubble").textContent = CONFIG.heroHook; }
+
+// Details
+document.getElementById("wordmark").firstChild.textContent = CONFIG.name;
+document.getElementById("footerName").textContent = CONFIG.name;
+document.title = CONFIG.name + " UGC";
+document.getElementById("email").textContent = CONFIG.email;
+document.getElementById("emailBtn").href = "mailto:" + CONFIG.email;
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Hook wall
+const grid = document.getElementById("grid");
+const filters = document.getElementById("filters");
+let tab = "main";
+function render(active) {
+  grid.innerHTML = "";
+  VIDEOS.filter(v => !!v.spec === (tab === "spec") && (active === "all" || v.niche === active)).forEach(item => {
+    const card = document.createElement("article");
+    card.className = "card";
+    const frame = document.createElement("button");
+    frame.className = "frame n-" + item.niche;
+    frame.setAttribute("aria-label", "Play video: " + item.hook);
+    if (item.src) { const v = videoEl(item.src); frame.appendChild(v); attachPlay(frame, v); }
+    else {
+      const ph = document.createElement("div"); ph.className = "ph";
+      ph.innerHTML = `<small>${NICHES[item.niche]}</small><span class="hook"></span><small>Add your video file here</small>`;
+      ph.querySelector(".hook").textContent = "“" + item.hook + "”";
+      frame.appendChild(ph);
+    }
+    frame.insertAdjacentHTML("beforeend", `<span class="badge">${item.length}</span><span class="play" aria-hidden="true"></span>`);
+    const meta = document.createElement("div"); meta.className = "card-meta";
+    meta.innerHTML = `<strong></strong><span></span>`;
+    meta.querySelector("strong").textContent = item.format;
+    meta.querySelector("span").textContent = NICHES[item.niche];
+    card.append(frame, meta);
+    grid.appendChild(card);
+  });
+}
+function buildFilters() {
+  filters.innerHTML = "";
+  const inTab = VIDEOS.filter(v => !!v.spec === (tab === "spec"));
+  filters.hidden = tab === "spec";
+  Object.entries(NICHES).forEach(([key, label]) => {
+    if (key !== "all" && !inTab.some(v => v.niche === key)) return;
+    const b = document.createElement("button");
+    b.className = "filter"; b.id = "filter-" + key; b.textContent = label;
+    b.setAttribute("aria-pressed", key === "all");
+    b.addEventListener("click", () => {
+      filters.querySelectorAll(".filter").forEach(f => f.setAttribute("aria-pressed", f === b));
+      render(key);
+    });
+    filters.appendChild(b);
+  });
+  document.getElementById("specNote").hidden = tab !== "spec";
+  render("all");
+}
+["main", "spec"].forEach(t => document.getElementById("tab-" + t).addEventListener("click", () => {
+  tab = t;
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b.id === "tab-" + t));
+  document.querySelectorAll("video").forEach(v => v.pause());
+  buildFilters();
+}));
+buildFilters();
+</script>
+</body>
+</html>

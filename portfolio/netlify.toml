@@ -1,0 +1,9 @@
+# Plain static site: no build step, Netlify serves this folder as-is.
+[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/videos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
